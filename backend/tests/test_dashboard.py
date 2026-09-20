@@ -6,7 +6,8 @@ from decimal import Decimal
 
 from httpx import AsyncClient
 
-from tests.helpers import money, txn_payload as _txn
+from tests.helpers import money
+from tests.helpers import txn_payload as _txn
 
 
 async def test_summary_is_zero_for_a_month_with_no_transactions(client: AsyncClient):

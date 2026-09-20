@@ -18,9 +18,11 @@ from app.api.routes import (
   net_worth,
   recurring,
   reports,
-  settings as settings_routes,
   tags,
   transactions,
+)
+from app.api.routes import (
+  settings as settings_routes,
 )
 from app.core.config import APP_VERSION, get_settings
 from app.db.seed import seed_default_account, seed_default_app_settings, seed_default_categories

@@ -8,7 +8,8 @@ from decimal import Decimal
 
 from httpx import AsyncClient
 
-from tests.helpers import money, txn_payload as _txn
+from tests.helpers import money
+from tests.helpers import txn_payload as _txn
 
 
 async def test_ranking_rolls_up_a_split_into_one_item_with_children(client: AsyncClient, account_id, categories):

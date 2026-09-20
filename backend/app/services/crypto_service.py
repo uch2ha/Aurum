@@ -21,8 +21,8 @@ reuses the last cached price.
 """
 
 import asyncio
+from datetime import UTC, datetime, timedelta
 from datetime import date as date_
-from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from itertools import groupby
 from typing import Literal, NamedTuple
@@ -358,7 +358,7 @@ async def refresh_prices(session: AsyncSession, *, force: bool, portfolio_id: in
   returned in the response's `holdings` list, for the Crypto tab's
   portfolio filter."""
   state = await get_or_create_sync_state(session)
-  now = datetime.now(timezone.utc)
+  now = datetime.now(UTC)
 
   if not force and state.last_synced_at is not None and now - state.last_synced_at < AUTO_REFRESH_INTERVAL:
     holdings = await list_holdings(session, portfolio_id)
@@ -482,7 +482,7 @@ async def create_holding(session: AsyncSession, payload: CryptoHoldingCreate) ->
     # GET /crypto/holdings doesn't immediately re-fetch every holding
     # again a moment later (see refresh_prices' 24h window).
     state = await get_or_create_sync_state(session)
-    state.last_synced_at = datetime.now(timezone.utc)
+    state.last_synced_at = datetime.now(UTC)
   except httpx.HTTPError:
     pass  # holding is still created — the next daily/manual sync will price it
 

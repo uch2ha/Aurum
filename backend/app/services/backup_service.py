@@ -11,7 +11,7 @@ app half-restored.
 """
 
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import HTTPException
 from sqlalchemy import delete, select, text
@@ -72,7 +72,7 @@ async def build_backup(session: AsyncSession) -> BackupPayload:
 
   return BackupPayload(
     aurum_backup_version=BACKUP_FORMAT_VERSION,
-    exported_at=datetime.now(timezone.utc),
+    exported_at=datetime.now(UTC),
     app_version=APP_VERSION,
     accounts=[AccountBackup.model_validate(row) for row in accounts],
     categories=[CategoryBackup.model_validate(row) for row in categories],
