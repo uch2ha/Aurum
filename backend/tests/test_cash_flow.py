@@ -10,7 +10,6 @@ from tests.helpers import money, txn_payload
 
 
 async def test_explicit_range_excludes_transactions_outside_it(client: AsyncClient, account_id, categories):
-  category_id = categories['Groceries']['id']
   salary_id = categories['Salary']['id']
   await client.post(
     '/transactions',
