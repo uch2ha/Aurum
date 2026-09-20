@@ -1,0 +1,63 @@
+# Local development only: hot reload for backend and frontend.
+# Usage: docker compose -f docker-compose.development.yml up --build
+# Separate volume and host ports from docker-compose.yml, so a dev stack never
+# touches production data. No auth, no nginx — Vite serves the UI directly.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${AURUM_POSTGRES_USER:-aurum}
+      POSTGRES_PASSWORD: ${AURUM_POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${AURUM_POSTGRES_DB:-aurum}
+    volumes:
+      - aurum_dev_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${AURUM_POSTGRES_USER:-aurum}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      AURUM_POSTGRES_USER: ${AURUM_POSTGRES_USER:-aurum}
+      AURUM_POSTGRES_PASSWORD: ${AURUM_POSTGRES_PASSWORD:-change-me}
+      AURUM_POSTGRES_DB: ${AURUM_POSTGRES_DB:-aurum}
+      AURUM_POSTGRES_HOST: db
+      AURUM_POSTGRES_PORT: 5432
+      AURUM_CORS_ORIGINS: ${AURUM_CORS_ORIGINS:-}
+      AURUM_DEFAULT_CURRENCY: ${AURUM_DEFAULT_CURRENCY:-USD}
+      AURUM_COINGECKO_API_KEY: ${AURUM_COINGECKO_API_KEY:-}
+      AURUM_ENABLE_DOCS: ${AURUM_ENABLE_DOCS:-true}
+    volumes:
+      - ./backend:/app
+    ports:
+      - '127.0.0.1:8000:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    environment:
+      # In-container "localhost" is the frontend itself; point Vite's proxy at
+      # the backend service instead.
+      VITE_API_PROXY_TARGET: http://backend:8000
+    volumes:
+      - ./frontend:/app
+      - aurum_dev_frontend_node_modules:/app/node_modules
+    ports:
+      - '127.0.0.1:5173:5173'
+    depends_on:
+      - backend
+
+volumes:
+  aurum_dev_pgdata:
+  aurum_dev_frontend_node_modules:
