@@ -10,6 +10,7 @@ Run it once against a running stack with:
 
 Safe to re-run — already-capitalized descriptions are left untouched.
 """
+
 import asyncio
 
 from sqlalchemy import select
@@ -20,24 +21,24 @@ from app.models import RecurringTransaction, Transaction
 
 
 async def _capitalize_all(session, model) -> int:
-    result = await session.execute(select(model))
-    updated = 0
-    for row in result.scalars().all():
-        fixed = capitalize_first_letter(row.description)
-        if fixed != row.description:
-            row.description = fixed
-            updated += 1
-    return updated
+  result = await session.execute(select(model))
+  updated = 0
+  for row in result.scalars().all():
+    fixed = capitalize_first_letter(row.description)
+    if fixed != row.description:
+      row.description = fixed
+      updated += 1
+  return updated
 
 
 async def main() -> None:
-    async with AsyncSessionLocal() as session:
-        transactions_updated = await _capitalize_all(session, Transaction)
-        recurring_updated = await _capitalize_all(session, RecurringTransaction)
-        await session.commit()
-        print(f"Transactions updated: {transactions_updated}")
-        print(f"Recurring templates updated: {recurring_updated}")
+  async with AsyncSessionLocal() as session:
+    transactions_updated = await _capitalize_all(session, Transaction)
+    recurring_updated = await _capitalize_all(session, RecurringTransaction)
+    await session.commit()
+    print(f'Transactions updated: {transactions_updated}')
+    print(f'Recurring templates updated: {recurring_updated}')
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+if __name__ == '__main__':
+  asyncio.run(main())

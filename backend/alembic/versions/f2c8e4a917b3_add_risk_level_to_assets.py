@@ -5,6 +5,7 @@ Revises: e91b6d3c5a04
 Create Date: 2026-08-16 23:30:00.000000
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -19,18 +20,18 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # ### existing rows need a default or this NOT NULL column addition fails outright. ###
-    op.add_column(
-        'assets',
-        sa.Column(
-            'risk_level',
-            sa.Enum('LOW', 'MEDIUM', 'HIGH', name='risk_level', native_enum=False, length=10),
-            nullable=False,
-            server_default='MEDIUM',
-        ),
-    )
-    op.alter_column('assets', 'risk_level', server_default=None)
+  # ### existing rows need a default or this NOT NULL column addition fails outright. ###
+  op.add_column(
+    'assets',
+    sa.Column(
+      'risk_level',
+      sa.Enum('LOW', 'MEDIUM', 'HIGH', name='risk_level', native_enum=False, length=10),
+      nullable=False,
+      server_default='MEDIUM',
+    ),
+  )
+  op.alter_column('assets', 'risk_level', server_default=None)
 
 
 def downgrade() -> None:
-    op.drop_column('assets', 'risk_level')
+  op.drop_column('assets', 'risk_level')

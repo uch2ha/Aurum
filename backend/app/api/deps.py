@@ -8,5 +8,5 @@ DbSession = AsyncSession
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    async for session in get_db():
-        yield session
+  async for session in get_db():
+    yield session
