@@ -1,8 +1,8 @@
-import { api } from "@/api/client";
-import type { Budget, BudgetInput, BudgetStatusResponse } from "@/types";
+import { api } from '@/api/client';
+import type { Budget, BudgetInput, BudgetStatusResponse } from '@/types';
 
 export function fetchBudgets() {
-  return api.get<Budget[]>("/budgets");
+  return api.get<Budget[]>('/budgets');
 }
 
 export function fetchBudgetStatus(year: number, month: number) {
@@ -10,7 +10,7 @@ export function fetchBudgetStatus(year: number, month: number) {
 }
 
 export function createBudget(input: BudgetInput) {
-  return api.post<Budget>("/budgets", input);
+  return api.post<Budget>('/budgets', input);
 }
 
 export function updateBudget(id: number, monthlyLimit: string) {

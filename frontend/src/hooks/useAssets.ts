@@ -1,17 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addAssetValuation, createAsset, deleteAsset, fetchAssets, updateAsset } from "@/api/assets";
-import type { AssetInput, AssetUpdateInput, AssetValuationInput } from "@/types";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { addAssetValuation, createAsset, deleteAsset, fetchAssets, updateAsset } from '@/api/assets';
+import type { AssetInput, AssetUpdateInput, AssetValuationInput } from '@/types';
 
 function useInvalidateNetWorth() {
   const queryClient = useQueryClient();
   return () => {
-    queryClient.invalidateQueries({ queryKey: ["assets"] });
-    queryClient.invalidateQueries({ queryKey: ["net-worth-summary"] });
+    queryClient.invalidateQueries({ queryKey: ['assets'] });
+    queryClient.invalidateQueries({ queryKey: ['net-worth-summary'] });
   };
 }
 
 export function useAssets() {
-  return useQuery({ queryKey: ["assets"], queryFn: fetchAssets });
+  return useQuery({ queryKey: ['assets'], queryFn: fetchAssets });
 }
 
 export function useCreateAsset() {

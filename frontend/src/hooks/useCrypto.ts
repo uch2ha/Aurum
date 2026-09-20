@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addCryptoTransaction,
   createCryptoHolding,
@@ -16,7 +16,7 @@ import {
   updateCryptoHoldingRisk,
   updateCryptoPortfolio,
   updateCryptoTransaction,
-} from "@/api/crypto";
+} from '@/api/crypto';
 import type {
   CryptoHoldingCreateInput,
   CryptoHoldingUpdateInput,
@@ -24,23 +24,23 @@ import type {
   CryptoRange,
   CryptoTransactionInput,
   RiskLevel,
-} from "@/types";
+} from '@/types';
 
 function useInvalidateCrypto() {
   const queryClient = useQueryClient();
   return () => {
-    queryClient.invalidateQueries({ queryKey: ["crypto-holdings"] });
-    queryClient.invalidateQueries({ queryKey: ["crypto-transactions"] });
-    queryClient.invalidateQueries({ queryKey: ["crypto-history"] });
+    queryClient.invalidateQueries({ queryKey: ['crypto-holdings'] });
+    queryClient.invalidateQueries({ queryKey: ['crypto-transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['crypto-history'] });
     // A crypto holding is a normal Asset under the hood — Net Worth's own
     // numbers change the moment one is added/traded/repriced/removed.
-    queryClient.invalidateQueries({ queryKey: ["net-worth-summary"] });
+    queryClient.invalidateQueries({ queryKey: ['net-worth-summary'] });
   };
 }
 
 export function useCryptoPortfolios(includeArchived = false) {
   return useQuery({
-    queryKey: ["crypto-portfolios", includeArchived],
+    queryKey: ['crypto-portfolios', includeArchived],
     queryFn: () => fetchCryptoPortfolios(includeArchived),
   });
 }
@@ -49,7 +49,7 @@ export function useCreateCryptoPortfolio() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: CryptoPortfolioInput) => createCryptoPortfolio(input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["crypto-portfolios"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['crypto-portfolios'] }),
   });
 }
 
@@ -58,7 +58,7 @@ export function useUpdateCryptoPortfolio() {
   return useMutation({
     mutationFn: ({ id, input }: { id: number; input: Partial<CryptoPortfolioInput> }) =>
       updateCryptoPortfolio(id, input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["crypto-portfolios"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['crypto-portfolios'] }),
   });
 }
 
@@ -66,20 +66,20 @@ export function useDeleteCryptoPortfolio() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: number) => deleteCryptoPortfolio(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["crypto-portfolios"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['crypto-portfolios'] }),
   });
 }
 
 export function useCryptoHoldings(portfolioId?: number | null) {
   return useQuery({
-    queryKey: ["crypto-holdings", portfolioId ?? null],
+    queryKey: ['crypto-holdings', portfolioId ?? null],
     queryFn: () => fetchCryptoHoldings(portfolioId),
   });
 }
 
 export function useCryptoHistory(range: CryptoRange, portfolioId?: number | null) {
   return useQuery({
-    queryKey: ["crypto-history", range, portfolioId ?? null],
+    queryKey: ['crypto-history', range, portfolioId ?? null],
     queryFn: () => fetchCryptoHistory(range, portfolioId),
   });
 }
@@ -89,15 +89,15 @@ export function useCryptoHistory(range: CryptoRange, portfolioId?: number | null
 // to run on every Crypto tab visit the way 7d/30d/1y already do for free.
 export function useCrypto90dPerformance(range: CryptoRange, portfolioId?: number | null) {
   return useQuery({
-    queryKey: ["crypto-performance-90d", portfolioId ?? null],
+    queryKey: ['crypto-performance-90d', portfolioId ?? null],
     queryFn: () => fetchCrypto90dPerformance(portfolioId),
-    enabled: range === "90d",
+    enabled: range === '90d',
   });
 }
 
 export function useCryptoTransactions(assetId: number | null) {
   return useQuery({
-    queryKey: ["crypto-transactions", assetId],
+    queryKey: ['crypto-transactions', assetId],
     queryFn: () => fetchCryptoTransactions(assetId!),
     enabled: assetId !== null,
   });

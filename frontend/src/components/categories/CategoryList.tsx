@@ -1,8 +1,8 @@
-import { Pencil, Trash2 } from "lucide-react";
-import { translateCategoryName } from "@/lib/categoryLabels";
-import { getCategoryIcon } from "@/lib/icons";
-import { useTranslation } from "@/lib/i18n";
-import type { Category } from "@/types";
+import { Pencil, Trash2 } from 'lucide-react';
+import { translateCategoryName } from '@/lib/categoryLabels';
+import { getCategoryIcon } from '@/lib/icons';
+import { useTranslation } from '@/lib/i18n';
+import type { Category } from '@/types';
 
 interface CategoryListProps {
   items: Category[];
@@ -22,35 +22,35 @@ function CategoryRow({ category, indented, onEdit, onDelete }: RowProps) {
   const Icon = getCategoryIcon(category.icon);
 
   return (
-    <li className={`flex items-center gap-3 py-2.5 ${indented ? "pl-8" : ""}`}>
+    <li className={`flex items-center gap-3 py-2.5 ${indented ? 'pl-8' : ''}`}>
       <span
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
+        className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full'
         style={{ backgroundColor: `${category.color}1a`, color: category.color }}
       >
         <Icon size={15} />
       </span>
-      <span className="flex min-w-0 flex-1 items-center gap-1.5 truncate text-sm font-medium text-text-primary">
-        <span className="truncate">{translateCategoryName(category.name)}</span>
+      <span className='flex min-w-0 flex-1 items-center gap-1.5 truncate text-sm font-medium text-text-primary'>
+        <span className='truncate'>{translateCategoryName(category.name)}</span>
         {category.is_default && (
-          <span className="shrink-0 rounded bg-surface-2 px-1 py-0.5 text-[10px] leading-none text-text-muted">
-            {t("category.defaultBadge")}
+          <span className='shrink-0 rounded bg-surface-2 px-1 py-0.5 text-[10px] leading-none text-text-muted'>
+            {t('category.defaultBadge')}
           </span>
         )}
       </span>
-      <span className="flex shrink-0 gap-1">
+      <span className='flex shrink-0 gap-1'>
         <button
-          type="button"
-          aria-label={t("common.edit")}
+          type='button'
+          aria-label={t('common.edit')}
           onClick={() => onEdit(category)}
-          className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+          className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary'
         >
           <Pencil size={15} />
         </button>
         <button
-          type="button"
-          aria-label={t("common.delete")}
+          type='button'
+          aria-label={t('common.delete')}
           onClick={() => onDelete(category)}
-          className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger"
+          className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger'
         >
           <Trash2 size={15} />
         </button>
@@ -63,7 +63,7 @@ export function CategoryList({ items, onEdit, onDelete }: CategoryListProps) {
   const { t } = useTranslation();
 
   if (items.length === 0) {
-    return <p className="py-6 text-center text-sm text-text-muted">{t("category.empty")}</p>;
+    return <p className='py-6 text-center text-sm text-text-muted'>{t('category.empty')}</p>;
   }
 
   // `items` arrives pre-sorted (alphabetically, by CategoriesPage) — walk
@@ -87,7 +87,7 @@ export function CategoryList({ items, onEdit, onDelete }: CategoryListProps) {
   for (const category of orphaned) rows.push({ category, indented: false });
 
   return (
-    <ul className="divide-y divide-gridline">
+    <ul className='divide-y divide-gridline'>
       {rows.map(({ category, indented }) => (
         <CategoryRow key={category.id} category={category} indented={indented} onEdit={onEdit} onDelete={onDelete} />
       ))}

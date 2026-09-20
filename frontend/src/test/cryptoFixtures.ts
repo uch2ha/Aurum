@@ -1,4 +1,4 @@
-import type { CryptoHolding } from "@/types";
+import type { CryptoHolding } from '@/types';
 
 let nextAssetId = 1;
 
@@ -14,19 +14,19 @@ export function makeHolding(overrides: Partial<CryptoHolding> = {}): CryptoHoldi
     symbol: `C${id}`,
     name: `Coin ${id}`,
     thumb_url: null,
-    risk_level: "high",
+    risk_level: 'high',
     network: null,
-    quantity: "1",
-    avg_buy_price: "1",
-    current_price: "1",
+    quantity: '1',
+    avg_buy_price: '1',
+    current_price: '1',
     price_change_1h: null,
     price_change_24h: null,
     price_change_7d: null,
     price_change_30d: null,
     price_change_1y: null,
-    value: "100",
-    cost_basis: "100",
-    profit_loss: "0",
+    value: '100',
+    cost_basis: '100',
+    profit_loss: '0',
     profit_loss_percent: 0,
     ...overrides,
   };

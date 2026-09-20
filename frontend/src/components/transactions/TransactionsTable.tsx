@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { ArrowLeftRight, CalendarSearch, Pencil, SquareDivide, StickyNote, Trash2 } from "lucide-react";
-import { Dialog } from "@/components/ui/Dialog";
-import { getCategoryIcon } from "@/lib/icons";
-import { formatCurrency, formatTransactionDate } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
-import { categoryPath, translateCategoryName } from "@/lib/categoryLabels";
-import { useCategories } from "@/hooks/useCategories";
-import type { Transaction } from "@/types";
+import { useState } from 'react';
+import { ArrowLeftRight, CalendarSearch, Pencil, SquareDivide, StickyNote, Trash2 } from 'lucide-react';
+import { Dialog } from '@/components/ui/Dialog';
+import { getCategoryIcon } from '@/lib/icons';
+import { formatCurrency, formatTransactionDate } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
+import { categoryPath, translateCategoryName } from '@/lib/categoryLabels';
+import { useCategories } from '@/hooks/useCategories';
+import type { Transaction } from '@/types';
 
 interface TransactionsTableProps {
   items: Transaction[];
@@ -25,89 +25,92 @@ export function TransactionsTable({ items, onEdit, onDelete, onJumpToMonth }: Tr
 
   if (items.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-text-muted">
-        {onJumpToMonth ? t("transactions.searchNoneFound") : t("transactions.noneFound")}
+      <p className='py-12 text-center text-sm text-text-muted'>
+        {onJumpToMonth ? t('transactions.searchNoneFound') : t('transactions.noneFound')}
       </p>
     );
   }
 
   return (
     <>
-      <ul className="divide-y divide-gridline">
+      <ul className='divide-y divide-gridline'>
         {items.map((tx) => {
-          const isTransfer = tx.type === "transfer";
-          const isExpense = tx.type === "expense";
+          const isTransfer = tx.type === 'transfer';
+          const isExpense = tx.type === 'expense';
           const isSplit = tx.splits.length > 0;
           const Icon = isTransfer ? ArrowLeftRight : isSplit ? SquareDivide : getCategoryIcon(tx.category?.icon);
-          const color = isTransfer || isSplit ? "var(--text-muted)" : tx.category?.color ?? "var(--text-muted)";
+          const color = isTransfer || isSplit ? 'var(--text-muted)' : (tx.category?.color ?? 'var(--text-muted)');
           const categoryLabel = isSplit
-            ? tx.splits.map((split) => (split.category ? translateCategoryName(split.category.name) : "?")).join(" + ")
+            ? tx.splits.map((split) => (split.category ? translateCategoryName(split.category.name) : '?')).join(' + ')
             : tx.category
               ? categoryPath(tx.category, categories)
               : null;
 
           return (
-            <li key={tx.id} className="group flex items-center gap-3 py-3">
+            <li key={tx.id} className='group flex items-center gap-3 py-3'>
               <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-                style={{ backgroundColor: typeof color === "string" && color.startsWith("#") ? `${color}26` : "var(--surface-2)" }}
+                className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full'
+                style={{
+                  backgroundColor:
+                    typeof color === 'string' && color.startsWith('#') ? `${color}26` : 'var(--surface-2)',
+                }}
               >
                 <Icon size={16} style={{ color }} />
               </span>
 
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-text-primary">{tx.description}</span>
-                <span className="block truncate text-xs text-text-muted">
+              <span className='min-w-0 flex-1'>
+                <span className='block truncate text-sm font-medium text-text-primary'>{tx.description}</span>
+                <span className='block truncate text-xs text-text-muted'>
                   {formatTransactionDate(tx.date, Boolean(onJumpToMonth))} · {tx.account.name}
-                  {isTransfer && tx.transfer_account_id ? ` ${t("transactions.transferSuffix")}` : ""}
-                  {categoryLabel ? ` · ${categoryLabel}` : ""}
-                  {tx.tags.length > 0 ? ` · ${tx.tags.map((tag) => tag.name).join(", ")}` : ""}
+                  {isTransfer && tx.transfer_account_id ? ` ${t('transactions.transferSuffix')}` : ''}
+                  {categoryLabel ? ` · ${categoryLabel}` : ''}
+                  {tx.tags.length > 0 ? ` · ${tx.tags.map((tag) => tag.name).join(', ')}` : ''}
                 </span>
               </span>
 
               <span
                 className={`shrink-0 text-sm font-medium tabular-nums ${
-                  isTransfer ? "text-text-muted" : isExpense ? "text-text-primary" : "text-success"
+                  isTransfer ? 'text-text-muted' : isExpense ? 'text-text-primary' : 'text-success'
                 }`}
               >
-                {isTransfer ? "" : isExpense ? "-" : "+"}
+                {isTransfer ? '' : isExpense ? '-' : '+'}
                 {formatCurrency(tx.amount)}
               </span>
 
-              <span className="flex shrink-0 gap-1">
+              <span className='flex shrink-0 gap-1'>
                 {onJumpToMonth && (
                   <button
-                    type="button"
-                    aria-label={t("transactions.jumpToMonth")}
+                    type='button'
+                    aria-label={t('transactions.jumpToMonth')}
                     onClick={() => onJumpToMonth(tx)}
-                    className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+                    className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary'
                   >
                     <CalendarSearch size={15} />
                   </button>
                 )}
                 {tx.notes && (
                   <button
-                    type="button"
-                    aria-label={t("transactions.viewNote")}
+                    type='button'
+                    aria-label={t('transactions.viewNote')}
                     onClick={() => setNoteTransaction(tx)}
-                    className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+                    className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary'
                   >
                     <StickyNote size={15} />
                   </button>
                 )}
                 <button
-                  type="button"
-                  aria-label={t("common.edit")}
+                  type='button'
+                  aria-label={t('common.edit')}
                   onClick={() => onEdit(tx)}
-                  className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+                  className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary'
                 >
                   <Pencil size={15} />
                 </button>
                 <button
-                  type="button"
-                  aria-label={t("common.delete")}
+                  type='button'
+                  aria-label={t('common.delete')}
                   onClick={() => onDelete(tx)}
-                  className="rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger"
+                  className='rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger'
                 >
                   <Trash2 size={15} />
                 </button>
@@ -120,9 +123,9 @@ export function TransactionsTable({ items, onEdit, onDelete, onJumpToMonth }: Tr
       <Dialog
         open={noteTransaction !== null}
         onClose={() => setNoteTransaction(null)}
-        title={t("transactions.noteDialogTitle")}
+        title={t('transactions.noteDialogTitle')}
       >
-        <p className="whitespace-pre-wrap text-sm text-text-primary">{noteTransaction?.notes}</p>
+        <p className='whitespace-pre-wrap text-sm text-text-primary'>{noteTransaction?.notes}</p>
       </Dialog>
     </>
   );

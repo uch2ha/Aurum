@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
-import { X } from "lucide-react";
-import { useCreateTag, useTags } from "@/hooks/useTags";
-import { useTranslation } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
-import type { Tag } from "@/types";
+import { useRef, useState } from 'react';
+import { X } from 'lucide-react';
+import { useCreateTag, useTags } from '@/hooks/useTags';
+import { useTranslation } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
+import type { Tag } from '@/types';
 
 interface TagInputProps {
   value: Tag[];
@@ -20,7 +20,7 @@ export function TagInput({ value, onChange }: TagInputProps) {
   const { data: allTags } = useTags();
   const createTag = useCreateTag();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +34,7 @@ export function TagInput({ value, onChange }: TagInputProps) {
 
   function addTag(tag: Tag) {
     onChange([...value, tag]);
-    setQuery("");
+    setQuery('');
     setOpen(false);
     inputRef.current?.focus();
   }
@@ -54,31 +54,31 @@ export function TagInput({ value, onChange }: TagInputProps) {
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (suggestions[0]) addTag(suggestions[0]);
       else void commitQuery();
-    } else if (event.key === "Escape") {
+    } else if (event.key === 'Escape') {
       setOpen(false);
-    } else if (event.key === "Backspace" && !query && value.length > 0) {
+    } else if (event.key === 'Backspace' && !query && value.length > 0) {
       removeTag(value[value.length - 1].id);
     }
   }
 
   return (
-    <div className="relative">
-      <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border bg-surface-1 px-2 py-1.5 focus-within:border-series-1">
+    <div className='relative'>
+      <div className='flex flex-wrap items-center gap-1.5 rounded-lg border border-border bg-surface-1 px-2 py-1.5 focus-within:border-series-1'>
         {value.map((tag) => (
           <span
             key={tag.id}
-            className="flex items-center gap-1 rounded-full bg-surface-2 py-0.5 pl-2 pr-1 text-xs text-text-secondary"
+            className='flex items-center gap-1 rounded-full bg-surface-2 py-0.5 pl-2 pr-1 text-xs text-text-secondary'
           >
             {tag.name}
             <button
-              type="button"
-              aria-label={t("transactions.form.removeTag", { name: tag.name })}
+              type='button'
+              aria-label={t('transactions.form.removeTag', { name: tag.name })}
               onClick={() => removeTag(tag.id)}
-              className="rounded-full p-0.5 text-text-muted hover:bg-surface-1 hover:text-text-primary"
+              className='rounded-full p-0.5 text-text-muted hover:bg-surface-1 hover:text-text-primary'
             >
               <X size={11} />
             </button>
@@ -86,9 +86,9 @@ export function TagInput({ value, onChange }: TagInputProps) {
         ))}
         <input
           ref={inputRef}
-          className="h-6 min-w-[8ch] flex-1 border-none bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
+          className='h-6 min-w-[8ch] flex-1 border-none bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted'
           value={query}
-          placeholder={value.length === 0 ? t("transactions.form.tagsPlaceholder") : ""}
+          placeholder={value.length === 0 ? t('transactions.form.tagsPlaceholder') : ''}
           onChange={(event) => {
             setQuery(event.target.value);
             setOpen(true);
@@ -100,14 +100,14 @@ export function TagInput({ value, onChange }: TagInputProps) {
       </div>
 
       {open && (suggestions.length > 0 || (trimmedQuery && !exactMatch)) && (
-        <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-border bg-surface-1 shadow-lg">
+        <ul className='absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-border bg-surface-1 shadow-lg'>
           {suggestions.map((tag) => (
             <li key={tag.id}>
               <button
-                type="button"
+                type='button'
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => addTag(tag)}
-                className={cn("block w-full px-3 py-1.5 text-left text-sm text-text-primary hover:bg-surface-2")}
+                className={cn('block w-full px-3 py-1.5 text-left text-sm text-text-primary hover:bg-surface-2')}
               >
                 {tag.name}
               </button>
@@ -116,12 +116,12 @@ export function TagInput({ value, onChange }: TagInputProps) {
           {trimmedQuery && !exactMatch && (
             <li>
               <button
-                type="button"
+                type='button'
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => void commitQuery()}
-                className="block w-full px-3 py-1.5 text-left text-sm text-series-1 hover:bg-surface-2"
+                className='block w-full px-3 py-1.5 text-left text-sm text-series-1 hover:bg-surface-2'
               >
-                {t("transactions.form.createTag", { name: trimmedQuery })}
+                {t('transactions.form.createTag', { name: trimmedQuery })}
               </button>
             </li>
           )}

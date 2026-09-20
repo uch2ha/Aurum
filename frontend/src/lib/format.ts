@@ -1,8 +1,8 @@
-import { getCurrency, getLanguage, type Language } from "@/lib/i18n";
+import { getCurrency, getLanguage, type Language } from '@/lib/i18n';
 
 /** Maps our app language to the Intl locale used for number/date formatting. */
 export function getIntlLocale(language: Language = getLanguage()): string {
-  return language === "ru" ? "ru-RU" : "en-US";
+  return language === 'ru' ? 'ru-RU' : 'en-US';
 }
 
 /** Builds the currency formatter every money helper here shares, so amounts
@@ -18,9 +18,9 @@ export function getIntlLocale(language: Language = getLanguage()): string {
  * other currency's "$1,234"/"1 234 ₽" into "USD 1,234"/"1 234 RUB". */
 function createCurrencyFormatter(currency: string, maximumFractionDigits: number): Intl.NumberFormat {
   return new Intl.NumberFormat(getIntlLocale(), {
-    style: "currency",
+    style: 'currency',
     currency,
-    currencyDisplay: "narrowSymbol",
+    currencyDisplay: 'narrowSymbol',
     maximumFractionDigits,
   });
 }
@@ -29,7 +29,7 @@ function createCurrencyFormatter(currency: string, maximumFractionDigits: number
 // — call sites only need to pass it explicitly when formatting a value known
 // to be in a *different* currency than that setting.
 export function formatCurrency(amount: number | string, currency: string = getCurrency()): string {
-  const value = typeof amount === "string" ? Number(amount) : amount;
+  const value = typeof amount === 'string' ? Number(amount) : amount;
   return createCurrencyFormatter(currency, 0).format(value);
 }
 
@@ -43,7 +43,7 @@ export function formatCurrency(amount: number | string, currency: string = getCu
  * cells and per-transaction price — anywhere a single coin's own value
  * needs to be told apart from zero, not just a portfolio-wide total. */
 export function formatCryptoAmount(amount: number | string, currency: string = getCurrency()): string {
-  const value = typeof amount === "string" ? Number(amount) : amount;
+  const value = typeof amount === 'string' ? Number(amount) : amount;
   const abs = Math.abs(value);
   const maximumFractionDigits =
     abs === 0 || abs >= 1
@@ -57,8 +57,8 @@ export function formatCryptoAmount(amount: number | string, currency: string = g
 }
 
 export function formatSignedCurrency(amount: number | string, currency: string = getCurrency()): string {
-  const value = typeof amount === "string" ? Number(amount) : amount;
-  const sign = value > 0 ? "+" : "";
+  const value = typeof amount === 'string' ? Number(amount) : amount;
+  const sign = value > 0 ? '+' : '';
   return `${sign}${formatCurrency(value, currency)}`;
 }
 
@@ -68,7 +68,7 @@ export function formatSignedCurrency(amount: number | string, currency: string =
  * number. Percentages are deliberately never masked by callers — a % move
  * doesn't reveal how much money is actually involved. */
 export function maskAmount(formatted: string, hidden: boolean): string {
-  return hidden ? "••••" : formatted;
+  return hidden ? '••••' : formatted;
 }
 
 /** Strips trailing zeros from a decimal string for pre-filling an editable
@@ -80,16 +80,16 @@ export function maskAmount(formatted: string, hidden: boolean): string {
  * wei-level token quantity) through floating point instead of just
  * trimming the padding. */
 export function trimTrailingZeros(value: string): string {
-  if (!value.includes(".")) return value;
-  const trimmed = value.replace(/0+$/, "").replace(/\.$/, "");
-  return trimmed === "" || trimmed === "-" || trimmed === "-0" ? "0" : trimmed;
+  if (!value.includes('.')) return value;
+  const trimmed = value.replace(/0+$/, '').replace(/\.$/, '');
+  return trimmed === '' || trimmed === '-' || trimmed === '-0' ? '0' : trimmed;
 }
 
-const MONTH_LABELS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
-const MONTH_LABELS_RU = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"] as const;
+const MONTH_LABELS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
+const MONTH_LABELS_RU = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'] as const;
 
 export function getMonthLabels(language: Language): readonly string[] {
-  return language === "ru" ? MONTH_LABELS_RU : MONTH_LABELS_EN;
+  return language === 'ru' ? MONTH_LABELS_RU : MONTH_LABELS_EN;
 }
 
 /** `includeYear` is for contexts spanning multiple years (e.g. an all-time
@@ -97,9 +97,9 @@ export function getMonthLabels(language: Language): readonly string[] {
 export function formatTransactionDate(isoDate: string, includeYear = false): string {
   const date = new Date(`${isoDate}T00:00:00`);
   return new Intl.DateTimeFormat(getIntlLocale(), {
-    month: "short",
-    day: "numeric",
-    year: includeYear ? "numeric" : undefined,
+    month: 'short',
+    day: 'numeric',
+    year: includeYear ? 'numeric' : undefined,
   }).format(date);
 }
 

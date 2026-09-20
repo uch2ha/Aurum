@@ -1,6 +1,6 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
-import { forgetCredential, isVaultAvailable, recallCredential, rememberCredential } from "@/lib/credentialVault";
+import { forgetCredential, isVaultAvailable, recallCredential, rememberCredential } from '@/lib/credentialVault';
 
 /**
  * Client-side mirror of the HTTP Basic Auth credentials Aurum's own login
@@ -22,12 +22,12 @@ import { forgetCredential, isVaultAvailable, recallCredential, rememberCredentia
  * localhost the remember tier is simply unavailable (isRememberSupported()) —
  * the login screen hides the checkbox rather than silently not remembering.
  */
-const SESSION_KEY = "aurum:basicAuth";
+const SESSION_KEY = 'aurum:basicAuth';
 // Where the pre-vault "remember me" tier kept its plaintext copy. Read never,
 // deleted always: an install upgrading past that version would otherwise
 // leave the password sitting on disk for up to a week with nothing left to
 // clear it.
-const LEGACY_REMEMBER_KEY = "aurum:basicAuth:remember";
+const LEGACY_REMEMBER_KEY = 'aurum:basicAuth:remember';
 const REMEMBER_DAYS = 7;
 const REMEMBER_MS = REMEMBER_DAYS * 24 * 60 * 60 * 1000;
 
@@ -87,7 +87,7 @@ export function whenAuthRestored(): Promise<void> {
 // password has to survive this, not just ASCII ones.
 function encodeUtf8Base64(value: string): string {
   const bytes = new TextEncoder().encode(value);
-  let binary = "";
+  let binary = '';
   bytes.forEach((byte) => {
     binary += String.fromCharCode(byte);
   });
@@ -136,7 +136,7 @@ export function clearCredentials(): void {
   notify();
 }
 
-export type CredentialCheck = "ok" | "unauthorized" | "unreachable";
+export type CredentialCheck = 'ok' | 'unauthorized' | 'unreachable';
 
 // A request with NO Authorization header at all, hitting an endpoint that
 // replies 401 + WWW-Authenticate: Basic, is exactly what makes some
@@ -148,7 +148,7 @@ export type CredentialCheck = "ok" | "unauthorized" | "unreachable";
 // omitting the header — it's guaranteed wrong, which is exactly what's
 // needed to tell "not configured" (200, header ignored) apart from
 // "configured, please log in" (401).
-const PROBE_HEADER = `Basic ${btoa("__aurum_probe__:__aurum_probe__")}`;
+const PROBE_HEADER = `Basic ${btoa('__aurum_probe__:__aurum_probe__')}`;
 
 /** Hits a lightweight, always-protected endpoint with the given header (or
  * none) to find out whether Basic Auth is required/satisfied. Used both to
@@ -157,12 +157,12 @@ const PROBE_HEADER = `Basic ${btoa("__aurum_probe__:__aurum_probe__")}`;
  * (see LoginScreen.tsx). */
 export async function checkCredentials(header: string | null): Promise<CredentialCheck> {
   try {
-    const response = await fetch("/api/accounts", {
+    const response = await fetch('/api/accounts', {
       headers: { Authorization: header ?? PROBE_HEADER },
     });
-    return response.status === 401 ? "unauthorized" : "ok";
+    return response.status === 401 ? 'unauthorized' : 'ok';
   } catch {
-    return "unreachable";
+    return 'unreachable';
   }
 }
 

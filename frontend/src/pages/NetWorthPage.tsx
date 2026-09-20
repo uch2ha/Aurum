@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { NetWorthChart } from "@/components/networth/NetWorthChart";
-import { AssetAllocationCard } from "@/components/networth/AssetAllocationCard";
-import { CapitalRoleSummaryCard } from "@/components/networth/CapitalRoleSummaryCard";
-import { RiskAllocationCard } from "@/components/networth/RiskAllocationCard";
-import { AssetsTable } from "@/components/networth/AssetsTable";
-import { AssetFormModal } from "@/components/networth/AssetFormModal";
-import { AlertBanner } from "@/components/insights/AlertBanner";
-import { useNetWorthSummary } from "@/hooks/useNetWorth";
-import { useAssets, useDeleteAsset } from "@/hooks/useAssets";
-import { useTranslation } from "@/lib/i18n";
-import type { Asset, NetWorthRange } from "@/types";
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { NetWorthChart } from '@/components/networth/NetWorthChart';
+import { AssetAllocationCard } from '@/components/networth/AssetAllocationCard';
+import { CapitalRoleSummaryCard } from '@/components/networth/CapitalRoleSummaryCard';
+import { RiskAllocationCard } from '@/components/networth/RiskAllocationCard';
+import { AssetsTable } from '@/components/networth/AssetsTable';
+import { AssetFormModal } from '@/components/networth/AssetFormModal';
+import { AlertBanner } from '@/components/insights/AlertBanner';
+import { useNetWorthSummary } from '@/hooks/useNetWorth';
+import { useAssets, useDeleteAsset } from '@/hooks/useAssets';
+import { useTranslation } from '@/lib/i18n';
+import type { Asset, NetWorthRange } from '@/types';
 
 export function NetWorthPage() {
   const { t } = useTranslation();
   // Defaults to 5 years: a short window can show a dip whenever spending
   // briefly outpaces recorded income, which reads as decline even though
   // the long-run trend is up — 5y is long enough to make that trend visible.
-  const [range, setRange] = useState<NetWorthRange>("5y");
+  const [range, setRange] = useState<NetWorthRange>('5y');
   const { data: summary, isLoading: isSummaryLoading } = useNetWorthSummary(range);
   const { data: assets, isLoading: isAssetsLoading } = useAssets();
   const deleteAsset = useDeleteAsset();
@@ -38,13 +38,13 @@ export function NetWorthPage() {
   }
 
   function handleDelete(asset: Asset) {
-    if (window.confirm(t("netWorth.confirmDeleteAsset", { name: asset.name }))) {
+    if (window.confirm(t('netWorth.confirmDeleteAsset', { name: asset.name }))) {
       deleteAsset.mutate(asset.id);
     }
   }
 
   return (
-    <div className="space-y-5">
+    <div className='space-y-5'>
       <AlertBanner />
 
       <NetWorthChart summary={summary} isLoading={isSummaryLoading} range={range} onRangeChange={setRange} />
@@ -57,15 +57,15 @@ export function NetWorthPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("netWorth.myAssetsTitle")}</CardTitle>
+          <CardTitle>{t('netWorth.myAssetsTitle')}</CardTitle>
           <Button onClick={openCreateModal}>
             <Plus size={16} />
-            {t("common.add")}
+            {t('common.add')}
           </Button>
         </CardHeader>
         <CardContent>
           {isAssetsLoading ? (
-            <p className="py-10 text-center text-sm text-text-muted">{t("common.loading")}</p>
+            <p className='py-10 text-center text-sm text-text-muted'>{t('common.loading')}</p>
           ) : (
             <AssetsTable items={assets ?? []} onEdit={openEditModal} onDelete={handleDelete} />
           )}

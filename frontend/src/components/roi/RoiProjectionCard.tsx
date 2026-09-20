@@ -1,7 +1,7 @@
-import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { formatCurrency } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
+import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { formatCurrency } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
 
 interface RoiProjectionCardProps {
   investmentAmount: number;
@@ -33,12 +33,12 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
-    <div className="rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md">
-      <p className="text-text-muted">{point.year}</p>
-      <p className="font-medium" style={{ color: "var(--series-1)" }}>
+    <div className='rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md'>
+      <p className='text-text-muted'>{point.year}</p>
+      <p className='font-medium' style={{ color: 'var(--series-1)' }}>
         {compoundLabel}: {formatCurrency(point.compound)}
       </p>
-      <p className="text-text-muted">
+      <p className='text-text-muted'>
         {simpleLabel}: {formatCurrency(point.simple)}
       </p>
     </div>
@@ -59,8 +59,8 @@ function ChartTooltip({
 export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPercent }: RoiProjectionCardProps) {
   const { t } = useTranslation();
   const rate = annualRoiPercent / 100;
-  const compoundLabel = t("roi.calculator.chartCompoundLabel");
-  const simpleLabel = t("roi.calculator.chartSimpleLabel");
+  const compoundLabel = t('roi.calculator.chartCompoundLabel');
+  const simpleLabel = t('roi.calculator.chartSimpleLabel');
 
   const chartData: ChartPoint[] = Array.from({ length: CHART_MAX_YEARS + 1 }, (_, year) => ({
     year,
@@ -71,44 +71,49 @@ export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPer
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("roi.calculator.projectionTitle")}</CardTitle>
+        <CardTitle>{t('roi.calculator.projectionTitle')}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-5">
-        <p className="text-xs text-text-muted">{t("roi.calculator.projectionHint", { percent: annualRoiPercent.toFixed(1) })}</p>
+      <CardContent className='space-y-5'>
+        <p className='text-xs text-text-muted'>
+          {t('roi.calculator.projectionHint', { percent: annualRoiPercent.toFixed(1) })}
+        </p>
 
-        <div className="h-56 w-full sm:h-64">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className='h-56 w-full sm:h-64'>
+          <ResponsiveContainer width='100%' height='100%'>
             <LineChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 4 }}>
               <XAxis
-                dataKey="year"
-                type="number"
+                dataKey='year'
+                type='number'
                 domain={[0, CHART_MAX_YEARS]}
                 ticks={CHART_TICKS}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+                tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
               />
-              <Tooltip content={<ChartTooltip compoundLabel={compoundLabel} simpleLabel={simpleLabel} />} cursor={{ stroke: "var(--gridline)", strokeWidth: 1 }} />
+              <Tooltip
+                content={<ChartTooltip compoundLabel={compoundLabel} simpleLabel={simpleLabel} />}
+                cursor={{ stroke: 'var(--gridline)', strokeWidth: 1 }}
+              />
               <Legend
-                verticalAlign="top"
+                verticalAlign='top'
                 height={24}
-                formatter={(value) => (value === "compound" ? compoundLabel : simpleLabel)}
-                wrapperStyle={{ fontSize: 12, color: "var(--text-muted)" }}
+                formatter={(value) => (value === 'compound' ? compoundLabel : simpleLabel)}
+                wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)' }}
               />
               <Line
-                type="monotone"
-                dataKey="compound"
-                stroke="var(--series-1)"
+                type='monotone'
+                dataKey='compound'
+                stroke='var(--series-1)'
                 strokeWidth={2}
                 dot={false}
                 isAnimationActive={false}
               />
               <Line
-                type="monotone"
-                dataKey="simple"
-                stroke="var(--text-muted)"
+                type='monotone'
+                dataKey='simple'
+                stroke='var(--text-muted)'
                 strokeWidth={2}
-                strokeDasharray="4 4"
+                strokeDasharray='4 4'
                 dot={false}
                 isAnimationActive={false}
               />
@@ -117,13 +122,15 @@ export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPer
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{t("roi.calculator.tableTitle")}</p>
-          <ul className="mt-2 divide-y divide-gridline">
-            <li className="flex items-center gap-3 py-2 text-xs font-medium text-text-muted">
-              <span className="flex-1" />
-              <span className="w-28 shrink-0 text-right">{t("roi.calculator.colCompound")}</span>
-              <span className="hidden w-28 shrink-0 text-right sm:block">{t("roi.calculator.colSimple")}</span>
-              <span className="w-24 shrink-0 text-right">{t("roi.calculator.colDifference")}</span>
+          <p className='text-xs font-semibold uppercase tracking-wide text-text-muted'>
+            {t('roi.calculator.tableTitle')}
+          </p>
+          <ul className='mt-2 divide-y divide-gridline'>
+            <li className='flex items-center gap-3 py-2 text-xs font-medium text-text-muted'>
+              <span className='flex-1' />
+              <span className='w-28 shrink-0 text-right'>{t('roi.calculator.colCompound')}</span>
+              <span className='hidden w-28 shrink-0 text-right sm:block'>{t('roi.calculator.colSimple')}</span>
+              <span className='w-24 shrink-0 text-right'>{t('roi.calculator.colDifference')}</span>
             </li>
             {TABLE_YEARS.map((year) => {
               const compound = investmentAmount * Math.pow(1 + rate, year);
@@ -134,21 +141,21 @@ export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPer
               // is >= 0 but still formats as "-$0") to a plain positive 0.
               const difference = Math.round((compound - simple) * 100) / 100 || 0;
               return (
-                <li key={year} className="flex items-center gap-3 py-2.5">
-                  <span className="flex-1 text-sm text-text-secondary">
-                    {year === 1 ? t("roi.calculator.yearOne") : t("roi.calculator.yearN", { years: year })}
+                <li key={year} className='flex items-center gap-3 py-2.5'>
+                  <span className='flex-1 text-sm text-text-secondary'>
+                    {year === 1 ? t('roi.calculator.yearOne') : t('roi.calculator.yearN', { years: year })}
                   </span>
-                  <span className="w-28 shrink-0 text-right text-sm font-medium tabular-nums text-text-primary">
+                  <span className='w-28 shrink-0 text-right text-sm font-medium tabular-nums text-text-primary'>
                     {formatCurrency(compound)}
                   </span>
-                  <span className="hidden w-28 shrink-0 text-right text-sm tabular-nums text-text-muted sm:block">
+                  <span className='hidden w-28 shrink-0 text-right text-sm tabular-nums text-text-muted sm:block'>
                     {formatCurrency(simple)}
                   </span>
                   <span
-                    className="w-24 shrink-0 text-right text-sm tabular-nums"
-                    style={{ color: difference >= 0 ? "var(--success)" : "var(--danger)" }}
+                    className='w-24 shrink-0 text-right text-sm tabular-nums'
+                    style={{ color: difference >= 0 ? 'var(--success)' : 'var(--danger)' }}
                   >
-                    {difference >= 0 ? "+" : ""}
+                    {difference >= 0 ? '+' : ''}
                     {formatCurrency(difference)}
                   </span>
                 </li>

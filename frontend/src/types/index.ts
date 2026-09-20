@@ -1,7 +1,7 @@
-export type AccountType = "checking" | "debit_card" | "savings" | "credit_card" | "cash" | "investment" | "other";
-export type CategoryKind = "income" | "expense";
-export type TransactionType = "income" | "expense" | "transfer";
-export type RecurringFrequency = "weekly" | "monthly" | "yearly";
+export type AccountType = 'checking' | 'debit_card' | 'savings' | 'credit_card' | 'cash' | 'investment' | 'other';
+export type CategoryKind = 'income' | 'expense';
+export type TransactionType = 'income' | 'expense' | 'transfer';
+export type RecurringFrequency = 'weekly' | 'monthly' | 'yearly';
 
 export interface Account {
   id: number;
@@ -193,10 +193,10 @@ export interface DashboardSummary {
   spending_by_category: CategoryBreakdownItem[];
 }
 
-export type AssetClass = "investments" | "crypto" | "real_estate" | "vehicles" | "precious_metals" | "other";
-export type NetWorthRange = "30d" | "90d" | "1y" | "5y" | "all";
-export type CapitalRole = "income" | "neutral" | "drain";
-export type RiskLevel = "low" | "medium" | "high";
+export type AssetClass = 'investments' | 'crypto' | 'real_estate' | 'vehicles' | 'precious_metals' | 'other';
+export type NetWorthRange = '30d' | '90d' | '1y' | '5y' | 'all';
+export type CapitalRole = 'income' | 'neutral' | 'drain';
+export type RiskLevel = 'low' | 'medium' | 'high';
 
 export interface Asset {
   id: number;
@@ -407,7 +407,7 @@ export interface BudgetStatusResponse {
 
 export interface AdviceItem {
   key: string;
-  tone: "positive" | "neutral" | "warning";
+  tone: 'positive' | 'neutral' | 'warning';
   params: Record<string, string | number>;
 }
 
@@ -421,7 +421,7 @@ export interface FinancialAlert {
   params: Record<string, number>;
 }
 
-export type CryptoTransactionType = "buy" | "sell";
+export type CryptoTransactionType = 'buy' | 'sell';
 
 export interface CryptoPortfolio {
   id: number;
@@ -517,7 +517,7 @@ export interface CryptoTransactionInput {
 export interface CryptoSyncResult {
   synced: boolean;
   last_synced_at: string | null;
-  error_key: "unreachable" | null;
+  error_key: 'unreachable' | null;
   holdings: CryptoHolding[];
 }
 
@@ -543,7 +543,7 @@ export interface CryptoPerformanceResponse {
 // No "24h" — the price history is only as dense as the sync cadence (see
 // services/crypto_service.py's AUTO_REFRESH_INTERVAL), so a 24h chart would
 // be one or two points, not a smooth intraday line.
-export type CryptoRange = "7d" | "30d" | "90d" | "all";
+export type CryptoRange = '7d' | '30d' | '90d' | 'all';
 
 export interface CryptoHistoryPoint {
   date: string;
@@ -569,4 +569,3 @@ export interface AppSettings {
    * from /api/health, which is served without auth. */
   app_version: string;
 }
-

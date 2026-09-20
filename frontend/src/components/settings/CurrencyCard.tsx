@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Select } from "@/components/ui/Input";
-import { useTranslation } from "@/lib/i18n";
-import { CURRENCIES, getCurrencyLabel } from "@/lib/currency";
-import { useAppSettings, useUpdateAppSettings } from "@/hooks/useSettings";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Select } from '@/components/ui/Input';
+import { useTranslation } from '@/lib/i18n';
+import { CURRENCIES, getCurrencyLabel } from '@/lib/currency';
+import { useAppSettings, useUpdateAppSettings } from '@/hooks/useSettings';
 
 export function CurrencyCard() {
   const { t, language } = useTranslation();
@@ -12,14 +12,14 @@ export function CurrencyCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("settings.currency")}</CardTitle>
+        <CardTitle>{t('settings.currency')}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className='space-y-2'>
         <Select
-          value={settings?.currency ?? ""}
+          value={settings?.currency ?? ''}
           disabled={isLoading || updateSettings.isPending}
           onChange={(event) => updateSettings.mutate({ currency: event.target.value })}
-          className="max-w-xs"
+          className='max-w-xs'
         >
           {CURRENCIES.map((currency) => (
             <option key={currency.code} value={currency.code}>
@@ -27,7 +27,7 @@ export function CurrencyCard() {
             </option>
           ))}
         </Select>
-        <p className="text-xs text-text-muted">{t("settings.currencyHint")}</p>
+        <p className='text-xs text-text-muted'>{t('settings.currencyHint')}</p>
       </CardContent>
     </Card>
   );

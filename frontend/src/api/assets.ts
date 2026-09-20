@@ -1,12 +1,12 @@
-import { api } from "@/api/client";
-import type { Asset, AssetInput, AssetUpdateInput, AssetValuationInput } from "@/types";
+import { api } from '@/api/client';
+import type { Asset, AssetInput, AssetUpdateInput, AssetValuationInput } from '@/types';
 
 export function fetchAssets() {
-  return api.get<Asset[]>("/assets");
+  return api.get<Asset[]>('/assets');
 }
 
 export function createAsset(input: AssetInput) {
-  return api.post<Asset>("/assets", input);
+  return api.post<Asset>('/assets', input);
 }
 
 export function updateAsset(id: number, input: AssetUpdateInput) {

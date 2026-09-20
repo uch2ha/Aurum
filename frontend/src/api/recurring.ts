@@ -1,12 +1,12 @@
-import { api } from "@/api/client";
-import type { RecurringTransaction, RecurringTransactionInput } from "@/types";
+import { api } from '@/api/client';
+import type { RecurringTransaction, RecurringTransactionInput } from '@/types';
 
 export function fetchRecurring() {
-  return api.get<RecurringTransaction[]>("/recurring");
+  return api.get<RecurringTransaction[]>('/recurring');
 }
 
 export function createRecurring(input: RecurringTransactionInput) {
-  return api.post<RecurringTransaction>("/recurring", input);
+  return api.post<RecurringTransaction>('/recurring', input);
 }
 
 export function updateRecurring(id: number, input: Partial<RecurringTransactionInput>) {

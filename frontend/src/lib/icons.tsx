@@ -36,7 +36,7 @@ import {
   Wallet,
   ZapOff,
   type LucideIcon,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Maps the backend's plain-string icon keys (Category.icon) to a concrete
 // lucide component. New categories fall back to a generic wallet glyph so an
@@ -45,28 +45,28 @@ import {
 // category but missing here silently renders as the Wallet fallback.
 const ICON_MAP: Record<string, LucideIcon> = {
   home: Home,
-  "shopping-basket": ShoppingBasket,
+  'shopping-basket': ShoppingBasket,
   utensils: Utensils,
   car: Car,
-  "heart-pulse": HeartPulse,
-  "shopping-bag": ShoppingBag,
+  'heart-pulse': HeartPulse,
+  'shopping-bag': ShoppingBag,
   clapperboard: Clapperboard,
   repeat: Repeat,
   banknote: Banknote,
   briefcase: Briefcase,
-  "trending-up": TrendingUp,
+  'trending-up': TrendingUp,
   gift: Gift,
-  "plus-circle": PlusCircle,
-  "more-horizontal": MoreHorizontal,
+  'plus-circle': PlusCircle,
+  'more-horizontal': MoreHorizontal,
   wallet: Wallet,
   bitcoin: Bitcoin,
-  "building-2": Building2,
+  'building-2': Building2,
   package: Package,
   gem: Gem,
   code: Code,
   dumbbell: Dumbbell,
-  "gamepad-2": Gamepad2,
-  "graduation-cap": GraduationCap,
+  'gamepad-2': Gamepad2,
+  'graduation-cap': GraduationCap,
   plane: Plane,
   receipt: Receipt,
   shapes: Shapes,
@@ -75,13 +75,13 @@ const ICON_MAP: Record<string, LucideIcon> = {
   sofa: Sofa,
   sparkles: Sparkles,
   tag: Tag,
-  "hand-coins": HandCoins,
+  'hand-coins': HandCoins,
   key: Key,
   truck: Truck,
   // lucide-react dropped brand/trademarked glyphs (no "Youtube" icon) — a
   // generic video-camera icon is the closest available stand-in.
   youtube: Video,
-  "zap-off": ZapOff,
+  'zap-off': ZapOff,
 };
 
 export function getCategoryIcon(icon: string | null | undefined): LucideIcon {

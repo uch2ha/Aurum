@@ -1,7 +1,7 @@
-import { Pencil, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "@/lib/i18n";
-import type { CryptoPortfolio } from "@/types";
+import { Pencil, Plus } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useTranslation } from '@/lib/i18n';
+import type { CryptoPortfolio } from '@/types';
 
 interface CryptoPortfolioTabsProps {
   portfolios: CryptoPortfolio[];
@@ -20,36 +20,36 @@ export function CryptoPortfolioTabs({ portfolios, activeId, onChange, onAdd, onE
   const active = portfolios.find((p) => p.id === activeId) ?? null;
 
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+    <div className='flex items-center gap-1.5 overflow-x-auto pb-1'>
       <button
-        type="button"
+        type='button'
         onClick={() => onChange(null)}
         className={cn(
-          "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+          'shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
           activeId === null
-            ? "border-series-1 bg-surface-2 text-text-primary"
-            : "border-border text-text-muted hover:text-text-primary"
+            ? 'border-series-1 bg-surface-2 text-text-primary'
+            : 'border-border text-text-muted hover:text-text-primary',
         )}
       >
-        {t("crypto.portfolio.all")}
+        {t('crypto.portfolio.all')}
       </button>
       {portfolios.map((portfolio) => {
         const isActive = portfolio.id === activeId;
         return (
           <button
             key={portfolio.id}
-            type="button"
+            type='button'
             onClick={() => onChange(portfolio.id)}
             className={cn(
-              "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+              'flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
               isActive
-                ? "border-series-1 bg-surface-2 text-text-primary"
-                : "border-border text-text-muted hover:text-text-primary"
+                ? 'border-series-1 bg-surface-2 text-text-primary'
+                : 'border-border text-text-muted hover:text-text-primary',
             )}
           >
             <span
-              className="h-2 w-2 shrink-0 rounded-full"
-              style={{ backgroundColor: portfolio.color ?? "var(--text-muted)" }}
+              className='h-2 w-2 shrink-0 rounded-full'
+              style={{ backgroundColor: portfolio.color ?? 'var(--text-muted)' }}
             />
             {portfolio.name}
           </button>
@@ -57,19 +57,19 @@ export function CryptoPortfolioTabs({ portfolios, activeId, onChange, onAdd, onE
       })}
       {active && (
         <button
-          type="button"
-          aria-label={t("common.edit")}
+          type='button'
+          aria-label={t('common.edit')}
           onClick={() => onEdit(active)}
-          className="shrink-0 rounded-full p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+          className='shrink-0 rounded-full p-1.5 text-text-muted hover:bg-surface-2 hover:text-text-primary'
         >
           <Pencil size={13} />
         </button>
       )}
       <button
-        type="button"
-        aria-label={t("crypto.portfolio.addLabel")}
+        type='button'
+        aria-label={t('crypto.portfolio.addLabel')}
         onClick={onAdd}
-        className="shrink-0 rounded-full border border-dashed border-border p-1.5 text-text-muted hover:border-series-1 hover:text-text-primary"
+        className='shrink-0 rounded-full border border-dashed border-border p-1.5 text-text-muted hover:border-series-1 hover:text-text-primary'
       >
         <Plus size={13} />
       </button>

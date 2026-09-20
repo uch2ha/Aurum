@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { Dialog } from "@/components/ui/Dialog";
-import { Button } from "@/components/ui/Button";
-import { Input, Label, Select } from "@/components/ui/Input";
-import { CategoryColorPicker } from "@/components/categories/CategoryColorPicker";
-import { CategoryIconPicker } from "@/components/categories/CategoryIconPicker";
-import { useCategories, useCreateCategory, useUpdateCategory } from "@/hooks/useCategories";
-import { translateCategoryName } from "@/lib/categoryLabels";
-import { useTranslation, type TranslationKey } from "@/lib/i18n";
-import type { Category, CategoryKind } from "@/types";
+import { useEffect, useState } from 'react';
+import { Dialog } from '@/components/ui/Dialog';
+import { Button } from '@/components/ui/Button';
+import { Input, Label, Select } from '@/components/ui/Input';
+import { CategoryColorPicker } from '@/components/categories/CategoryColorPicker';
+import { CategoryIconPicker } from '@/components/categories/CategoryIconPicker';
+import { useCategories, useCreateCategory, useUpdateCategory } from '@/hooks/useCategories';
+import { translateCategoryName } from '@/lib/categoryLabels';
+import { useTranslation, type TranslationKey } from '@/lib/i18n';
+import type { Category, CategoryKind } from '@/types';
 
 interface CategoryFormModalProps {
   open: boolean;
@@ -18,10 +18,10 @@ interface CategoryFormModalProps {
   defaultKind: CategoryKind;
 }
 
-const KINDS: CategoryKind[] = ["expense", "income"];
+const KINDS: CategoryKind[] = ['expense', 'income'];
 
 function emptyForm(kind: CategoryKind) {
-  return { name: "", kind, icon: "wallet", color: "#2a78d6", parent_id: "" };
+  return { name: '', kind, icon: 'wallet', color: '#2a78d6', parent_id: '' };
 }
 
 export function CategoryFormModal({ open, onClose, category, defaultKind }: CategoryFormModalProps) {
@@ -40,11 +40,11 @@ export function CategoryFormModal({ open, onClose, category, defaultKind }: Cate
         ? {
             name: category.name,
             kind: category.kind,
-            icon: category.icon ?? "wallet",
+            icon: category.icon ?? 'wallet',
             color: category.color,
-            parent_id: category.parent_id ? String(category.parent_id) : "",
+            parent_id: category.parent_id ? String(category.parent_id) : '',
           }
-        : emptyForm(defaultKind)
+        : emptyForm(defaultKind),
     );
     setError(null);
   }, [open, category, defaultKind]);
@@ -53,7 +53,7 @@ export function CategoryFormModal({ open, onClose, category, defaultKind }: Cate
   // (backend rejects it) — the parent picker is disabled in that case.
   const hasChildren = category ? (allCategories ?? []).some((c) => c.parent_id === category.id) : false;
   const parentCandidates = (allCategories ?? []).filter(
-    (c) => c.kind === form.kind && c.parent_id === null && c.id !== category?.id
+    (c) => c.kind === form.kind && c.parent_id === null && c.id !== category?.id,
   );
 
   const isSaving = createCategory.isPending || updateCategory.isPending;
@@ -71,36 +71,42 @@ export function CategoryFormModal({ open, onClose, category, defaultKind }: Cate
           input: { name: form.name, icon: form.icon, color: form.color, parent_id },
         });
       } else {
-        await createCategory.mutateAsync({ name: form.name, kind: form.kind, icon: form.icon, color: form.color, parent_id });
+        await createCategory.mutateAsync({
+          name: form.name,
+          kind: form.kind,
+          icon: form.icon,
+          color: form.color,
+          parent_id,
+        });
       }
       onClose();
     } catch {
-      setError(t("category.form.saveError"));
+      setError(t('category.form.saveError'));
     }
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title={category ? t("category.form.editTitle") : t("category.form.newTitle")}>
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <Dialog open={open} onClose={onClose} title={category ? t('category.form.editTitle') : t('category.form.newTitle')}>
+      <form onSubmit={handleSubmit} className='space-y-3'>
         <div>
-          <Label htmlFor="category-name">{t("category.form.nameLabel")}</Label>
+          <Label htmlFor='category-name'>{t('category.form.nameLabel')}</Label>
           <Input
-            id="category-name"
+            id='category-name'
             required
-            placeholder={t("category.form.namePlaceholder")}
+            placeholder={t('category.form.namePlaceholder')}
             value={form.name}
             onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
           />
         </div>
 
         <div>
-          <Label htmlFor="category-kind">{t("category.form.kindLabel")}</Label>
+          <Label htmlFor='category-kind'>{t('category.form.kindLabel')}</Label>
           <Select
-            id="category-kind"
+            id='category-kind'
             value={form.kind}
             disabled={Boolean(category)}
             onChange={(event) =>
-              setForm((prev) => ({ ...prev, kind: event.target.value as CategoryKind, parent_id: "" }))
+              setForm((prev) => ({ ...prev, kind: event.target.value as CategoryKind, parent_id: '' }))
             }
           >
             {KINDS.map((kind) => (
@@ -112,41 +118,41 @@ export function CategoryFormModal({ open, onClose, category, defaultKind }: Cate
         </div>
 
         <div>
-          <Label htmlFor="category-parent">{t("category.form.parentLabel")}</Label>
+          <Label htmlFor='category-parent'>{t('category.form.parentLabel')}</Label>
           <Select
-            id="category-parent"
-            value={hasChildren ? "" : form.parent_id}
+            id='category-parent'
+            value={hasChildren ? '' : form.parent_id}
             disabled={hasChildren}
             onChange={(event) => setForm((prev) => ({ ...prev, parent_id: event.target.value }))}
           >
-            <option value="">{t("category.form.noParent")}</option>
+            <option value=''>{t('category.form.noParent')}</option>
             {parentCandidates.map((parent) => (
               <option key={parent.id} value={parent.id}>
                 {translateCategoryName(parent.name)}
               </option>
             ))}
           </Select>
-          {hasChildren && <p className="mt-1 text-xs text-text-muted">{t("category.form.hasChildrenHint")}</p>}
+          {hasChildren && <p className='mt-1 text-xs text-text-muted'>{t('category.form.hasChildrenHint')}</p>}
         </div>
 
         <div>
-          <Label>{t("category.form.iconLabel")}</Label>
+          <Label>{t('category.form.iconLabel')}</Label>
           <CategoryIconPicker value={form.icon} onChange={(icon) => setForm((prev) => ({ ...prev, icon }))} />
         </div>
 
         <div>
-          <Label>{t("category.form.colorLabel")}</Label>
+          <Label>{t('category.form.colorLabel')}</Label>
           <CategoryColorPicker value={form.color} onChange={(color) => setForm((prev) => ({ ...prev, color }))} />
         </div>
 
-        {error && <p className="text-sm text-danger">{error}</p>}
+        {error && <p className='text-sm text-danger'>{error}</p>}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            {t("common.cancel")}
+        <div className='flex justify-end gap-2 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose}>
+            {t('common.cancel')}
           </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("common.saving") : t("common.save")}
+          <Button type='submit' disabled={isSaving}>
+            {isSaving ? t('common.saving') : t('common.save')}
           </Button>
         </div>
       </form>

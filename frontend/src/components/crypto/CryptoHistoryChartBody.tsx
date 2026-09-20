@@ -1,7 +1,7 @@
-import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
-import { formatCurrency, getIntlLocale, maskAmount } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
-import type { CryptoHistoryResponse } from "@/types";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from 'recharts';
+import { formatCurrency, getIntlLocale, maskAmount } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
+import type { CryptoHistoryResponse } from '@/types';
 
 interface CryptoHistoryChartBodyProps {
   history: CryptoHistoryResponse | undefined;
@@ -10,7 +10,9 @@ interface CryptoHistoryChartBodyProps {
 }
 
 function formatAxisDate(iso: string): string {
-  return new Intl.DateTimeFormat(getIntlLocale(), { month: "short", day: "numeric" }).format(new Date(`${iso}T00:00:00`));
+  return new Intl.DateTimeFormat(getIntlLocale(), { month: 'short', day: 'numeric' }).format(
+    new Date(`${iso}T00:00:00`),
+  );
 }
 
 function ChartTooltip({
@@ -25,9 +27,9 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
-    <div className="rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md">
-      <p className="text-text-muted">{formatAxisDate(point.date)}</p>
-      <p className="font-medium text-text-primary">{maskAmount(formatCurrency(point.value), hidden)}</p>
+    <div className='rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md'>
+      <p className='text-text-muted'>{formatAxisDate(point.date)}</p>
+      <p className='font-medium text-text-primary'>{maskAmount(formatCurrency(point.value), hidden)}</p>
     </div>
   );
 }
@@ -38,33 +40,36 @@ function ChartTooltip({
 export function CryptoHistoryChartBody({ history, isLoading, hidden }: CryptoHistoryChartBodyProps) {
   const { t } = useTranslation();
   const isPositive = history ? Number(history.change_amount) >= 0 : true;
-  const trendColor = isPositive ? "var(--success)" : "var(--danger)";
+  const trendColor = isPositive ? 'var(--success)' : 'var(--danger)';
   const chartData = history?.series.map((point) => ({ date: point.date, value: Number(point.value) })) ?? [];
 
   return (
     <>
-      <div className="h-56 w-full sm:h-64">
+      <div className='h-56 w-full sm:h-64'>
         {isLoading || chartData.length === 0 ? (
-          <div className="flex h-full items-center justify-center text-sm text-text-muted">
-            {isLoading ? t("common.loading") : t("netWorth.noChartData")}
+          <div className='flex h-full items-center justify-center text-sm text-text-muted'>
+            {isLoading ? t('common.loading') : t('netWorth.noChartData')}
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width='100%' height='100%'>
             <AreaChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 4 }}>
               <defs>
-                <linearGradient id="cryptoHistoryFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={trendColor} stopOpacity={0.18} />
-                  <stop offset="100%" stopColor={trendColor} stopOpacity={0} />
+                <linearGradient id='cryptoHistoryFill' x1='0' y1='0' x2='0' y2='1'>
+                  <stop offset='0%' stopColor={trendColor} stopOpacity={0.18} />
+                  <stop offset='100%' stopColor={trendColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <YAxis hide domain={["auto", "auto"]} />
-              <Tooltip content={<ChartTooltip hidden={hidden} />} cursor={{ stroke: "var(--gridline)", strokeWidth: 1 }} />
+              <YAxis hide domain={['auto', 'auto']} />
+              <Tooltip
+                content={<ChartTooltip hidden={hidden} />}
+                cursor={{ stroke: 'var(--gridline)', strokeWidth: 1 }}
+              />
               <Area
-                type="monotone"
-                dataKey="value"
+                type='monotone'
+                dataKey='value'
                 stroke={trendColor}
                 strokeWidth={2}
-                fill="url(#cryptoHistoryFill)"
+                fill='url(#cryptoHistoryFill)'
                 isAnimationActive={false}
                 activeDot={{ r: 4, strokeWidth: 0 }}
               />
@@ -73,7 +78,7 @@ export function CryptoHistoryChartBody({ history, isLoading, hidden }: CryptoHis
         )}
       </div>
       {chartData.length > 1 && (
-        <div className="mt-2 flex justify-between text-xs text-text-muted">
+        <div className='mt-2 flex justify-between text-xs text-text-muted'>
           <span>{formatAxisDate(chartData[0].date)}</span>
           <span>{formatAxisDate(chartData[chartData.length - 1].date)}</span>
         </div>

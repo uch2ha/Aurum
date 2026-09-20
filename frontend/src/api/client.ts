@@ -1,6 +1,6 @@
-import { clearCredentials, getAuthHeader } from "@/lib/auth";
+import { clearCredentials, getAuthHeader } from '@/lib/auth';
 
-const API_BASE = "/api";
+const API_BASE = '/api';
 
 export class ApiError extends Error {
   status: number;
@@ -14,7 +14,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const authHeader = getAuthHeader();
   const response = await fetch(`${API_BASE}${path}`, {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...(authHeader ? { Authorization: authHeader } : {}),
     },
     ...init,
@@ -32,7 +32,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     let message = body || response.statusText;
     try {
       const parsed = JSON.parse(body) as { detail?: unknown };
-      if (typeof parsed.detail === "string") message = parsed.detail;
+      if (typeof parsed.detail === 'string') message = parsed.detail;
     } catch {
       // body wasn't JSON — fall back to the raw text set above
     }
@@ -48,9 +48,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   get: <T>(path: string) => request<T>(path),
-  post: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: "POST", body: JSON.stringify(body) }),
-  patch: <T>(path: string, body: unknown) =>
-    request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
-  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  post: <T>(path: string, body: unknown) => request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
+  patch: <T>(path: string, body: unknown) => request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
 };
