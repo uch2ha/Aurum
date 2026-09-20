@@ -11,6 +11,12 @@ import { parseAmount, parseCsv, parseDateWithFormat } from '@/lib/csv';
 
 const EMPTY: ImportMapping = { date: '', amount: '', description: '', merchant: '', notes: '', category: '' };
 
+const requirePreset = (id: string) => {
+  const preset = findPreset(id);
+  if (!preset) throw new Error(`Missing preset: ${id}`);
+  return preset;
+};
+
 // Header rows as the banks actually emit them (see the per-preset comments in
 // lib/bankPresets.ts for where each export comes from).
 const TBANK_CSV = [
@@ -51,7 +57,7 @@ describe('detectPreset', () => {
 describe('applyPresetMapping', () => {
   it('maps T-Bank onto the card-currency amount and keeps the category', () => {
     const headers = parseCsv(TBANK_CSV)[0];
-    const mapping = applyPresetMapping(findPreset('tbank')!, headers, EMPTY);
+    const mapping = applyPresetMapping(requirePreset('tbank'), headers, EMPTY);
     expect(mapping).toMatchObject({
       date: 'Дата операции',
       amount: 'Сумма платежа',
@@ -62,14 +68,14 @@ describe('applyPresetMapping', () => {
 
   it("matches monobank's currency-suffixed amount header by prefix", () => {
     const headers = parseCsv(MONOBANK_CSV)[0];
-    const mapping = applyPresetMapping(findPreset('monobank')!, headers, EMPTY);
+    const mapping = applyPresetMapping(requirePreset('monobank'), headers, EMPTY);
     expect(mapping.amount).toBe('Сума в валюті картки (UAH)');
     expect(mapping.date).toBe('Дата i час операції');
   });
 
   it("leaves fields the preset doesn't cover on the fallback", () => {
     const headers = parseCsv(PRIVAT_CSV)[0];
-    const mapping = applyPresetMapping(findPreset('privatbank')!, headers, { ...EMPTY, notes: 'Картка' });
+    const mapping = applyPresetMapping(requirePreset('privatbank'), headers, { ...EMPTY, notes: 'Картка' });
     expect(mapping.notes).toBe('Картка');
     expect(mapping.category).toBe('Категорія');
   });
@@ -78,15 +84,15 @@ describe('applyPresetMapping', () => {
 describe('rowFilterRejection', () => {
   it('drops T-Bank rows whose status is not OK and reports the status', () => {
     const [headers, ok, failed] = parseCsv(TBANK_CSV);
-    const preset = findPreset('tbank')!;
+    const preset = requirePreset('tbank');
     expect(rowFilterRejection(preset, headers, ok)).toBeNull();
     expect(rowFilterRejection(preset, headers, failed)).toBe('FAILED');
   });
 
   it('keeps everything when the preset has no filter or the column is absent', () => {
     const [headers, row] = parseCsv(MONOBANK_CSV);
-    expect(rowFilterRejection(findPreset('monobank')!, headers, row)).toBeNull();
-    expect(rowFilterRejection(findPreset('tbank')!, ['Дата'], ['01.01.2024'])).toBeNull();
+    expect(rowFilterRejection(requirePreset('monobank'), headers, row)).toBeNull();
+    expect(rowFilterRejection(requirePreset('tbank'), ['Дата'], ['01.01.2024'])).toBeNull();
     expect(rowFilterRejection(null, headers, row)).toBeNull();
   });
 });
@@ -94,14 +100,14 @@ describe('rowFilterRejection', () => {
 describe('preset formats against real sample rows', () => {
   it("parses T-Bank's timestamped date and comma-decimal amount", () => {
     const [, row] = parseCsv(TBANK_CSV);
-    const preset = findPreset('tbank')!;
+    const preset = requirePreset('tbank');
     expect(parseDateWithFormat(row[0], preset.dateFormat)).toBe('2018-10-24');
     expect(parseAmount(row[6], preset.amountFormat)).toBe(-882.04);
   });
 
   it("parses monobank's timestamped date and dot-decimal amount", () => {
     const [, row] = parseCsv(MONOBANK_CSV);
-    const preset = findPreset('monobank')!;
+    const preset = requirePreset('monobank');
     expect(parseDateWithFormat(row[0], preset.dateFormat)).toBe('2024-03-01');
     expect(parseAmount(row[3], preset.amountFormat)).toBe(-250.5);
     // monobank writes empty cells as an em dash — must not parse as 0.
@@ -110,7 +116,7 @@ describe('preset formats against real sample rows', () => {
 
   it("parses PrivatBank's plain date and comma amount", () => {
     const [, row] = parseCsv(PRIVAT_CSV);
-    const preset = findPreset('privatbank')!;
+    const preset = requirePreset('privatbank');
     expect(parseDateWithFormat(row[0], preset.dateFormat)).toBe('2024-02-05');
     expect(parseAmount(row[5], preset.amountFormat)).toBe(-320);
   });

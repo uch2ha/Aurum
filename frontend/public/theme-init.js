@@ -11,7 +11,7 @@
 // every edit to these lines. Loaded as a plain synchronous <script src> in
 // <head>, which still blocks the first paint, so the no-flash behaviour is
 // unchanged.
-(function () {
+(() => {
   var stored = localStorage.getItem('aurum:theme');
   if (stored === 'light' || stored === 'dark') {
     document.documentElement.setAttribute('data-theme', stored);

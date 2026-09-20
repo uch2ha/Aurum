@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <title>Aurum</title>
   <defs>
     <linearGradient id="aurumCoin" x1="5" y1="4" x2="27" y2="28" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#f7d488"/>

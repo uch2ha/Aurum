@@ -188,6 +188,11 @@ export function CsvImportPage() {
     return amount < 0 ? 'expense' : 'income';
   }
 
+  const categoryNameById = (categoryId: number | null): string => {
+    const category = categories?.find((c) => c.id === categoryId);
+    return category ? translateCategoryName(category.name) : '—';
+  };
+
   /** First non-empty raw value under `headerName`, shown next to a mapping
    * dropdown so the user can confirm they picked the right column before
    * committing to a full preview — a bank's own header names (or a header
@@ -734,9 +739,7 @@ export function CsvImportPage() {
                             <td className='whitespace-nowrap px-3 py-1.5 text-text-secondary'>{item.date}</td>
                             <td className='px-3 py-1.5 text-text-primary'>{item.description}</td>
                             <td className='whitespace-nowrap px-3 py-1.5 text-text-secondary'>
-                              {categories?.find((c) => c.id === item.category_id)
-                                ? translateCategoryName(categories.find((c) => c.id === item.category_id)!.name)
-                                : '—'}
+                              {categoryNameById(item.category_id)}
                             </td>
                             <td
                               className={`whitespace-nowrap px-3 py-1.5 text-right tabular-nums ${

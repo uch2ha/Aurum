@@ -27,7 +27,7 @@ function RiskBars({ level, size = 1 }: { level: RiskLevel; size?: number }) {
     <span className='flex items-end gap-0.5' style={{ transform: `scale(${size})` }}>
       {BAR_HEIGHTS.map((height, index) => (
         <span
-          key={index}
+          key={height}
           className={`w-1 rounded-sm ${height}`}
           style={{ backgroundColor: index < filled ? RISK_COLOR[level] : 'var(--border)' }}
         />

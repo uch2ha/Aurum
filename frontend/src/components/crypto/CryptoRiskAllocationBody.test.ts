@@ -28,7 +28,10 @@ describe('computeRiskTiers', () => {
       makeHolding({ symbol: 'SHIB', risk_level: 'high', value: '100' }),
       makeHolding({ symbol: 'PEPE', risk_level: 'high', value: '50' }),
     ];
-    const high = computeRiskTiers(holdings).find((t) => t.level === 'high')!;
+
+    const high = computeRiskTiers(holdings).find((t) => t.level === 'high');
+    if (!high) throw new Error('Expected a high tier');
+
     expect(high.value).toBe(150);
     expect(high.items).toHaveLength(2);
   });
@@ -38,7 +41,10 @@ describe('computeRiskTiers', () => {
       makeHolding({ symbol: 'BTC', risk_level: 'low', value: '100' }),
       makeHolding({ symbol: 'UNPRICED', risk_level: 'low', value: null }),
     ];
-    const low = computeRiskTiers(holdings).find((t) => t.level === 'low')!;
+
+    const low = computeRiskTiers(holdings).find((t) => t.level === 'low');
+    if (!low) throw new Error('Expected a low tier');
+
     expect(low.value).toBe(100);
     expect(low.percent).toBe(100);
     expect(low.items).toHaveLength(1);
@@ -49,7 +55,10 @@ describe('computeRiskTiers', () => {
       makeHolding({ symbol: 'SMALL', risk_level: 'high', value: '10' }),
       makeHolding({ symbol: 'BIG', risk_level: 'high', value: '90' }),
     ];
-    const high = computeRiskTiers(holdings).find((t) => t.level === 'high')!;
+
+    const high = computeRiskTiers(holdings).find((t) => t.level === 'high');
+    if (!high) throw new Error('Expected a high tier');
+
     expect(high.items.map((i) => i.symbol)).toEqual(['BIG', 'SMALL']);
   });
 
@@ -59,15 +68,23 @@ describe('computeRiskTiers', () => {
       makeHolding({ symbol: 'SMALL', risk_level: 'high', value: '10' }),
       makeHolding({ symbol: 'OTHER_TIER', risk_level: 'low', value: '900' }),
     ];
-    const high = computeRiskTiers(holdings).find((t) => t.level === 'high')!;
+
+    const high = computeRiskTiers(holdings).find((t) => t.level === 'high');
+    if (!high) throw new Error('Expected a high tier');
+
     // 90/100 and 10/100 of the *high tier's* 100, not of the 1000 total.
-    expect(high.items.find((i) => i.symbol === 'BIG')!.percent).toBeCloseTo(90);
-    expect(high.items.find((i) => i.symbol === 'SMALL')!.percent).toBeCloseTo(10);
+    const big = high.items.find((i) => i.symbol === 'BIG');
+    const small = high.items.find((i) => i.symbol === 'SMALL');
+    if (!big || !small) throw new Error('Expected BIG and SMALL items');
+
+    expect(big.percent).toBeCloseTo(90);
+    expect(small.percent).toBeCloseTo(10);
   });
 
   it('leaves an empty tier at 0%, not NaN, when nothing is held in it', () => {
     const holdings = [makeHolding({ risk_level: 'high', value: '100' })];
-    const low = computeRiskTiers(holdings).find((t) => t.level === 'low')!;
+    const low = computeRiskTiers(holdings).find((t) => t.level === 'low');
+    if (!low) throw new Error('Expected a low tier');
     expect(low.value).toBe(0);
     expect(low.percent).toBe(0);
     expect(low.items).toEqual([]);

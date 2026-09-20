@@ -13,8 +13,8 @@ describe('buildSlices (network allocation)', () => {
     ];
     const slices = buildSlices(holdings, UNSET);
     const byLabel = Object.fromEntries(slices.map((s) => [s.label, s.amount]));
-    expect(byLabel['Ethereum']).toBe(150);
-    expect(byLabel['Tron']).toBe(30);
+    expect(byLabel.Ethereum).toBe(150);
+    expect(byLabel.Tron).toBe(30);
   });
 
   it('folds holdings with no network into one unset bucket instead of dropping them', () => {
@@ -48,7 +48,10 @@ describe('buildSlices (network allocation)', () => {
     const holdings = Array.from({ length: 9 }, (_, i) => makeHolding({ network: `Net${i}`, value: String(9 - i) }));
     const slices = buildSlices(holdings, UNSET);
     expect(slices).toHaveLength(8); // 7 top + 1 "other"
-    const other = slices.find((s) => s.key === '__other__')!;
+
+    const other = slices.find((s) => s.key === '__other__');
+    if (!other) throw new Error("Expected an '__other__' slice");
+
     expect(other).toBeDefined();
     // The two smallest: Net7 (value 2) and Net8 (value 1).
     expect(other.amount).toBe(3);

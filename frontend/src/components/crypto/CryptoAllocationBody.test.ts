@@ -23,7 +23,10 @@ describe('buildSlices (per-coin allocation)', () => {
     const holdings = Array.from({ length: 9 }, (_, i) => makeHolding({ symbol: `C${i}`, value: String(9 - i) }));
     const slices = buildSlices(holdings);
     expect(slices).toHaveLength(8);
-    const other = slices.find((s) => s.key === 'other')!;
+
+    const other = slices.find((s) => s.key === 'other');
+    if (!other) throw new Error("Expected an 'other' slice");
+
     expect(other.name).toBe('Other');
     expect(other.symbol).toBeNull();
     // The two smallest holdings: value 2 and value 1.

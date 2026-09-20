@@ -64,7 +64,7 @@ export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPer
 
   const chartData: ChartPoint[] = Array.from({ length: CHART_MAX_YEARS + 1 }, (_, year) => ({
     year,
-    compound: investmentAmount * Math.pow(1 + rate, year),
+    compound: investmentAmount * (1 + rate) ** year,
     simple: investmentAmount + annualIncome * year,
   }));
 
@@ -133,7 +133,7 @@ export function RoiProjectionCard({ investmentAmount, annualIncome, annualRoiPer
               <span className='w-24 shrink-0 text-right'>{t('roi.calculator.colDifference')}</span>
             </li>
             {TABLE_YEARS.map((year) => {
-              const compound = investmentAmount * Math.pow(1 + rate, year);
+              const compound = investmentAmount * (1 + rate) ** year;
               const simple = investmentAmount + annualIncome * year;
               // Rounded to the cent before comparing sign — compound and simple
               // agree exactly in year 1, but Math.pow's floating-point error
