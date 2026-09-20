@@ -15,18 +15,19 @@ that lives in the same database it's auditing disappears in exactly the event
 it exists to explain (a restore truncates it too). Read it with
 `docker compose logs backend`.
 """
+
 import logging
 
-logger = logging.getLogger("aurum.audit")
+logger = logging.getLogger('aurum.audit')
 
 
 def log_destructive(action: str, **details: object) -> None:
-    """Record one irreversible operation. `details` are rendered as
-    key=value; keep them to counts and identifiers — never transaction
-    descriptions, amounts or anything else that would spill the user's
-    finances into a log file that gets shared when debugging."""
-    if details:
-        rendered = " ".join(f"{key}={value}" for key, value in details.items())
-        logger.warning("%s %s", action, rendered)
-    else:
-        logger.warning("%s", action)
+  """Record one irreversible operation. `details` are rendered as
+  key=value; keep them to counts and identifiers — never transaction
+  descriptions, amounts or anything else that would spill the user's
+  finances into a log file that gets shared when debugging."""
+  if details:
+    rendered = ' '.join(f'{key}={value}' for key, value in details.items())
+    logger.warning('%s %s', action, rendered)
+  else:
+    logger.warning('%s', action)

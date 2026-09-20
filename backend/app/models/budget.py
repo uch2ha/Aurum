@@ -1,7 +1,9 @@
 """A monthly spending limit for one expense category — compared against
 actual spend for whichever month is being viewed (services/budget_service.py).
 Not month-scoped itself: one limit per category, in effect until changed."""
+
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,14 +11,15 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 from app.models.mixins import TimestampMixin
 
+if TYPE_CHECKING:
+  from app.models.category import Category
+
 
 class Budget(Base, TimestampMixin):
-    __tablename__ = "budgets"
+  __tablename__ = 'budgets'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    category_id: Mapped[int] = mapped_column(
-        ForeignKey("categories.id", ondelete="CASCADE"), nullable=False, unique=True
-    )
-    monthly_limit: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
+  id: Mapped[int] = mapped_column(primary_key=True)
+  category_id: Mapped[int] = mapped_column(ForeignKey('categories.id', ondelete='CASCADE'), nullable=False, unique=True)
+  monthly_limit: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
 
-    category: Mapped["Category"] = relationship()
+  category: Mapped['Category'] = relationship()
