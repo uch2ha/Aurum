@@ -1,10 +1,15 @@
 """A spending/income category, colored so it maps 1:1 to a dashboard chart slot."""
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.models.enums import CategoryKind
+
+if TYPE_CHECKING:
+  from app.models.transaction import Transaction
 
 
 class Category(Base):

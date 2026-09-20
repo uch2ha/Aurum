@@ -5,10 +5,15 @@ A transaction can carry any number of tags, a tag can be reused across any
 number of transactions — see transaction_tags below.
 """
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+
+if TYPE_CHECKING:
+  from app.models.transaction import Transaction
 
 transaction_tags = Table(
   'transaction_tags',

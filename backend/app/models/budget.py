@@ -3,12 +3,16 @@ actual spend for whichever month is being viewed (services/budget_service.py).
 Not month-scoped itself: one limit per category, in effect until changed."""
 
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.models.mixins import TimestampMixin
+
+if TYPE_CHECKING:
+  from app.models.category import Category
 
 
 class Budget(Base, TimestampMixin):

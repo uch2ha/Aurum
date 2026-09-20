@@ -1,6 +1,7 @@
 """A single money movement: income, expense, or a transfer between accounts."""
 
 from datetime import date as date_
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Date, Enum, ForeignKey, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,6 +10,11 @@ from app.db.base import Base
 from app.models.enums import TransactionType
 from app.models.mixins import TimestampMixin
 from app.models.tag import transaction_tags
+
+if TYPE_CHECKING:
+  from app.models.account import Account
+  from app.models.category import Category
+  from app.models.tag import Tag
 
 
 class Transaction(Base, TimestampMixin):

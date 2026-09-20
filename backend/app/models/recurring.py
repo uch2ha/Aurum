@@ -6,6 +6,7 @@ Transaction row from the template.
 """
 
 from datetime import date as date_
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, Date, Enum, ForeignKey, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -13,6 +14,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 from app.models.enums import RecurringFrequency, TransactionType
 from app.models.mixins import TimestampMixin
+
+if TYPE_CHECKING:
+  from app.models.account import Account
+  from app.models.category import Category
 
 
 class RecurringTransaction(Base, TimestampMixin):

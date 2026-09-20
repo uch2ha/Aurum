@@ -1,11 +1,18 @@
 """An account is any place money lives: bank account, card, cash, wallet."""
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 from app.models.enums import AccountType
 from app.models.mixins import TimestampMixin
+
+if TYPE_CHECKING:
+  # Resolved at mapper-configure time, not import time — a runtime import
+  # here would close the Account <-> Transaction import cycle.
+  from app.models.transaction import Transaction
 
 
 class Account(Base, TimestampMixin):
