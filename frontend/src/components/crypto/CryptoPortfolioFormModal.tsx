@@ -1,10 +1,10 @@
-import { type FormEvent, useEffect, useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { Dialog } from "@/components/ui/Dialog";
-import { Input, Label } from "@/components/ui/Input";
-import { useCreateCryptoPortfolio, useDeleteCryptoPortfolio, useUpdateCryptoPortfolio } from "@/hooks/useCrypto";
-import { useTranslation } from "@/lib/i18n";
-import type { CryptoPortfolio } from "@/types";
+import { type FormEvent, useEffect, useState } from 'react';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { Input, Label } from '@/components/ui/Input';
+import { useCreateCryptoPortfolio, useDeleteCryptoPortfolio, useUpdateCryptoPortfolio } from '@/hooks/useCrypto';
+import { useTranslation } from '@/lib/i18n';
+import type { CryptoPortfolio } from '@/types';
 
 interface CryptoPortfolioFormModalProps {
   open: boolean;
@@ -24,13 +24,13 @@ export function CryptoPortfolioFormModal({ open, onClose, portfolio, onDeleted }
   const updatePortfolio = useUpdateCryptoPortfolio();
   const deletePortfolio = useDeleteCryptoPortfolio();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [saveError, setSaveError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
-    setName(portfolio?.name ?? "");
+    setName(portfolio?.name ?? '');
     setSaveError(null);
     setDeleteError(null);
   }, [open, portfolio]);
@@ -48,7 +48,7 @@ export function CryptoPortfolioFormModal({ open, onClose, portfolio, onDeleted }
       }
       onClose();
     } catch {
-      setSaveError(t("crypto.portfolio.form.saveError"));
+      setSaveError(t('crypto.portfolio.form.saveError'));
     }
   }
 
@@ -59,7 +59,7 @@ export function CryptoPortfolioFormModal({ open, onClose, portfolio, onDeleted }
 
   async function handleDelete() {
     if (!portfolio) return;
-    if (!window.confirm(t("crypto.portfolio.confirmDelete", { name: portfolio.name }))) return;
+    if (!window.confirm(t('crypto.portfolio.confirmDelete', { name: portfolio.name }))) return;
     setDeleteError(null);
     try {
       await deletePortfolio.mutateAsync(portfolio.id);
@@ -68,7 +68,7 @@ export function CryptoPortfolioFormModal({ open, onClose, portfolio, onDeleted }
     } catch {
       // 400 when the portfolio still has coins in it — the only realistic
       // failure mode here (see services/crypto_service.py's delete_portfolio).
-      setDeleteError(t("crypto.portfolio.deleteError"));
+      setDeleteError(t('crypto.portfolio.deleteError'));
     }
   }
 
@@ -76,48 +76,48 @@ export function CryptoPortfolioFormModal({ open, onClose, portfolio, onDeleted }
     <Dialog
       open={open}
       onClose={onClose}
-      title={portfolio ? t("crypto.portfolio.form.editTitle") : t("crypto.portfolio.form.newTitle")}
+      title={portfolio ? t('crypto.portfolio.form.editTitle') : t('crypto.portfolio.form.newTitle')}
     >
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className='space-y-3'>
         <div>
-          <Label htmlFor="portfolio-name">{t("crypto.portfolio.form.nameLabel")}</Label>
+          <Label htmlFor='portfolio-name'>{t('crypto.portfolio.form.nameLabel')}</Label>
           <Input
-            id="portfolio-name"
+            id='portfolio-name'
             autoFocus
             required
             maxLength={100}
-            placeholder={t("crypto.portfolio.form.namePlaceholder")}
+            placeholder={t('crypto.portfolio.form.namePlaceholder')}
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
         </div>
 
-        {saveError && <p className="text-sm text-danger">{saveError}</p>}
+        {saveError && <p className='text-sm text-danger'>{saveError}</p>}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            {t("common.cancel")}
+        <div className='flex justify-end gap-2 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose}>
+            {t('common.cancel')}
           </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("common.saving") : t("common.save")}
+          <Button type='submit' disabled={isSaving}>
+            {isSaving ? t('common.saving') : t('common.save')}
           </Button>
         </div>
 
         {portfolio && (
-          <div className="flex items-center justify-between border-t border-border pt-3">
+          <div className='flex items-center justify-between border-t border-border pt-3'>
             <button
-              type="button"
+              type='button'
               onClick={handleToggleArchived}
-              className="text-xs font-medium text-text-muted hover:text-text-primary"
+              className='text-xs font-medium text-text-muted hover:text-text-primary'
             >
-              {portfolio.is_archived ? t("crypto.portfolio.unarchiveLabel") : t("crypto.portfolio.archiveLabel")}
+              {portfolio.is_archived ? t('crypto.portfolio.unarchiveLabel') : t('crypto.portfolio.archiveLabel')}
             </button>
-            <button type="button" onClick={handleDelete} className="text-xs font-medium text-danger hover:underline">
-              {t("common.delete")}
+            <button type='button' onClick={handleDelete} className='text-xs font-medium text-danger hover:underline'>
+              {t('common.delete')}
             </button>
           </div>
         )}
-        {deleteError && <p className="text-sm text-danger">{deleteError}</p>}
+        {deleteError && <p className='text-sm text-danger'>{deleteError}</p>}
       </form>
     </Dialog>
   );

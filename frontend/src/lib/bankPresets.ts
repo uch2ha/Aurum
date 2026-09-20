@@ -10,7 +10,7 @@
 // Only banks whose personal-account CSV export has a known, stable header
 // layout are listed. Banks that export PDF/XLSX only (Sber, Kaspi, Halyk,
 // maib…) go through the generic mapping via a third-party converter instead.
-import type { AmountFormat, DateFormat } from "@/lib/csv";
+import type { AmountFormat, DateFormat } from '@/lib/csv';
 
 /** Column mapping as the wizard understands it — header *names*, not
  * indexes, so re-decoding the file under another encoding can re-resolve
@@ -51,16 +51,16 @@ export interface BankPreset {
  * nobody typing a matcher by hand would guess that. */
 export function normalizeHeader(header: string): string {
   return header
-    .replace(/^\uFEFF/, "")
+    .replace(/^\uFEFF/, '')
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/i/g, "і");
+    .replace(/\s+/g, ' ')
+    .replace(/i/g, 'і');
 }
 
 function findHeader(headers: string[], matcher: HeaderMatcher): string {
   const candidates = matcher.map(normalizeHeader);
-  return headers.find((header) => candidates.some((candidate) => normalizeHeader(header).startsWith(candidate))) ?? "";
+  return headers.find((header) => candidates.some((candidate) => normalizeHeader(header).startsWith(candidate))) ?? '';
 }
 
 export const BANK_PRESETS: readonly BankPreset[] = [
@@ -70,49 +70,49 @@ export const BANK_PRESETS: readonly BankPreset[] = [
     // "Сумма платежа" is the amount in the card's own currency (a foreign
     // purchase shows the original amount in "Сумма операции"), which is what
     // the account balance actually moved by.
-    id: "tbank",
-    label: "Т-Банк",
-    detect: [["дата операции"], ["сумма платежа"], ["описание"], ["статус"]],
+    id: 'tbank',
+    label: 'Т-Банк',
+    detect: [['дата операции'], ['сумма платежа'], ['описание'], ['статус']],
     mapping: {
-      date: ["дата операции"],
-      amount: ["сумма платежа"],
-      description: ["описание"],
-      category: ["категория"],
+      date: ['дата операции'],
+      amount: ['сумма платежа'],
+      description: ['описание'],
+      category: ['категория'],
     },
-    dateFormat: "DD.MM.YYYY",
-    amountFormat: "comma-decimal",
-    rowFilter: { column: ["статус"], accept: (value) => value.trim().toUpperCase() === "OK" },
+    dateFormat: 'DD.MM.YYYY',
+    amountFormat: 'comma-decimal',
+    rowFilter: { column: ['статус'], accept: (value) => value.trim().toUpperCase() === 'OK' },
   },
   {
     // App → card → Виписка → CSV, Ukrainian UI language. Comma-separated,
     // UTF-8, dot decimal mark, empty cells written as an em dash ("—").
     // The amount header embeds the card currency, hence the prefix match.
-    id: "monobank",
-    label: "monobank",
-    detect: [["дата і час операції"], ["деталі операції"], ["сума в валюті картки"]],
+    id: 'monobank',
+    label: 'monobank',
+    detect: [['дата і час операції'], ['деталі операції'], ['сума в валюті картки']],
     mapping: {
-      date: ["дата і час операції"],
-      amount: ["сума в валюті картки"],
-      description: ["деталі операції"],
+      date: ['дата і час операції'],
+      amount: ['сума в валюті картки'],
+      description: ['деталі операції'],
     },
-    dateFormat: "DD.MM.YYYY",
-    amountFormat: "dot-decimal",
+    dateFormat: 'DD.MM.YYYY',
+    amountFormat: 'dot-decimal',
   },
   {
     // next.privat24.ua → card → Виписки → CSV. Date and time come in
     // separate columns, so the plain date parses as-is; the amount in the
     // card's currency is what the balance moved by.
-    id: "privatbank",
-    label: "ПриватБанк",
-    detect: [["дата"], ["опис операції"], ["сума в валюті картки"]],
+    id: 'privatbank',
+    label: 'ПриватБанк',
+    detect: [['дата'], ['опис операції'], ['сума в валюті картки']],
     mapping: {
-      date: ["дата"],
-      amount: ["сума в валюті картки"],
-      description: ["опис операції"],
-      category: ["категорія"],
+      date: ['дата'],
+      amount: ['сума в валюті картки'],
+      description: ['опис операції'],
+      category: ['категорія'],
     },
-    dateFormat: "DD.MM.YYYY",
-    amountFormat: "auto",
+    dateFormat: 'DD.MM.YYYY',
+    amountFormat: 'auto',
   },
 ];
 
@@ -123,7 +123,7 @@ export function findPreset(id: string): BankPreset | null {
 /** The first preset whose every `detect` matcher finds a header. Order in
  * BANK_PRESETS matters only if two banks ever share a header set. */
 export function detectPreset(headers: string[]): BankPreset | null {
-  return BANK_PRESETS.find((preset) => preset.detect.every((matcher) => findHeader(headers, matcher) !== "")) ?? null;
+  return BANK_PRESETS.find((preset) => preset.detect.every((matcher) => findHeader(headers, matcher) !== '')) ?? null;
 }
 
 /** Resolves a preset's matchers against the actual header row. Fields the
@@ -147,6 +147,6 @@ export function rowFilterRejection(preset: BankPreset | null, headers: string[],
   if (!preset?.rowFilter) return null;
   const idx = headers.indexOf(findHeader(headers, preset.rowFilter.column));
   if (idx < 0) return null;
-  const value = cells[idx] ?? "";
+  const value = cells[idx] ?? '';
   return preset.rowFilter.accept(value) ? null : value.trim();
 }

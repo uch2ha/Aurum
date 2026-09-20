@@ -1,4 +1,4 @@
-import { t, type TranslationKey } from "@/lib/i18n";
+import { t, type TranslationKey } from '@/lib/i18n';
 
 // Maps the exact seeded English category name (backend/app/db/seed.py) to
 // its translation key, so the fixed default set reads in the user's chosen
@@ -6,23 +6,23 @@ import { t, type TranslationKey } from "@/lib/i18n";
 // through the category-management UI (CategoriesPage) aren't in this map —
 // their name is whatever the user typed and is shown as-is.
 const DEFAULT_CATEGORY_KEYS: Record<string, TranslationKey> = {
-  "Housing & Utilities": "category.housingUtilities",
-  Groceries: "category.groceries",
-  "Dining Out": "category.diningOut",
-  Transportation: "category.transportation",
-  "Health & Fitness": "category.healthFitness",
-  Shopping: "category.shopping",
-  Entertainment: "category.entertainment",
-  Subscriptions: "category.subscriptions",
-  Salary: "category.salary",
-  Freelance: "category.freelance",
-  Investments: "category.investments",
-  Gifts: "category.gifts",
-  "Business Income": "category.businessIncome",
-  "Rental Income": "category.rentalIncome",
-  Benefits: "category.benefits",
-  "Item Sales": "category.itemSales",
-  "Other Income": "category.otherIncome",
+  'Housing & Utilities': 'category.housingUtilities',
+  Groceries: 'category.groceries',
+  'Dining Out': 'category.diningOut',
+  Transportation: 'category.transportation',
+  'Health & Fitness': 'category.healthFitness',
+  Shopping: 'category.shopping',
+  Entertainment: 'category.entertainment',
+  Subscriptions: 'category.subscriptions',
+  Salary: 'category.salary',
+  Freelance: 'category.freelance',
+  Investments: 'category.investments',
+  Gifts: 'category.gifts',
+  'Business Income': 'category.businessIncome',
+  'Rental Income': 'category.rentalIncome',
+  Benefits: 'category.benefits',
+  'Item Sales': 'category.itemSales',
+  'Other Income': 'category.otherIncome',
 };
 
 export function translateCategoryName(name: string): string {
@@ -39,7 +39,7 @@ export function translateCategoryName(name: string): string {
  * single lookup is enough. */
 export function categoryPath(
   category: { name: string; parent_id: number | null },
-  categories: { id: number; name: string }[] | undefined
+  categories: { id: number; name: string }[] | undefined,
 ): string {
   if (category.parent_id == null) return translateCategoryName(category.name);
   const parent = categories?.find((c) => c.id === category.parent_id);
@@ -55,10 +55,10 @@ export function categoryPath(
  * read the same way. */
 export function buildHierarchicalCategories<C extends { id: number; parent_id: number | null; name: string }>(
   categories: C[],
-  language: string
+  language: string,
 ): (C & { indented: boolean })[] {
   const sorted = [...categories].sort((a, b) =>
-    translateCategoryName(a.name).localeCompare(translateCategoryName(b.name), language)
+    translateCategoryName(a.name).localeCompare(translateCategoryName(b.name), language),
   );
   const result: (C & { indented: boolean })[] = [];
   for (const parent of sorted.filter((category) => category.parent_id === null)) {

@@ -1,8 +1,8 @@
-import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { formatCurrency, formatSignedCurrency, getIntlLocale } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
-import type { CashFlowResponse } from "@/types";
+import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { formatCurrency, formatSignedCurrency, getIntlLocale } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
+import type { CashFlowResponse } from '@/types';
 
 interface CashFlowChartProps {
   cashFlow: CashFlowResponse | undefined;
@@ -10,12 +10,12 @@ interface CashFlowChartProps {
 }
 
 function monthKey(year: number, month: number): string {
-  return `${year}-${String(month).padStart(2, "0")}-01`;
+  return `${year}-${String(month).padStart(2, '0')}-01`;
 }
 
 function formatMonthLabel(key: string): string {
-  return new Intl.DateTimeFormat(getIntlLocale(), { month: "short", year: "numeric" }).format(
-    new Date(`${key}T00:00:00`)
+  return new Intl.DateTimeFormat(getIntlLocale(), { month: 'short', year: 'numeric' }).format(
+    new Date(`${key}T00:00:00`),
   );
 }
 
@@ -57,15 +57,15 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
-    <div className="rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md">
-      <p className="text-text-muted">{formatMonthLabel(point.key)}</p>
-      <p className="text-success">
+    <div className='rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md'>
+      <p className='text-text-muted'>{formatMonthLabel(point.key)}</p>
+      <p className='text-success'>
         {incomeLabel}: {formatCurrency(point.income)}
       </p>
-      <p className="text-danger">
+      <p className='text-danger'>
         {expenseLabel}: {formatCurrency(point.expense)}
       </p>
-      <p className="font-medium text-text-primary">
+      <p className='font-medium text-text-primary'>
         {netLabel}: {formatSignedCurrency(point.net)}
       </p>
     </div>
@@ -74,9 +74,9 @@ function ChartTooltip({
 
 export function CashFlowChart({ cashFlow, isLoading }: CashFlowChartProps) {
   const { t } = useTranslation();
-  const incomeLabel = t("cashFlow.income");
-  const expenseLabel = t("cashFlow.expense");
-  const netLabel = t("cashFlow.net");
+  const incomeLabel = t('cashFlow.income');
+  const expenseLabel = t('cashFlow.expense');
+  const netLabel = t('cashFlow.net');
 
   const chartData: ChartPoint[] =
     cashFlow?.points.map((point) => ({
@@ -89,19 +89,19 @@ export function CashFlowChart({ cashFlow, isLoading }: CashFlowChartProps) {
 
   return (
     <Card>
-      <CardHeader className="items-start">
+      <CardHeader className='items-start'>
         <div>
-          <CardTitle>{t("nav.cashFlow")}</CardTitle>
-          <p className="mt-1.5 text-2xl font-semibold tabular-nums text-text-primary sm:text-[28px]">
-            {isLoading || !cashFlow ? "…" : formatSignedCurrency(cashFlow.total_net)}
+          <CardTitle>{t('nav.cashFlow')}</CardTitle>
+          <p className='mt-1.5 text-2xl font-semibold tabular-nums text-text-primary sm:text-[28px]'>
+            {isLoading || !cashFlow ? '…' : formatSignedCurrency(cashFlow.total_net)}
           </p>
           {cashFlow && (
-            <p className="mt-1 text-sm">
-              <span className="font-medium text-success">
+            <p className='mt-1 text-sm'>
+              <span className='font-medium text-success'>
                 {incomeLabel} {formatCurrency(cashFlow.total_income)}
               </span>
-              <span className="text-text-muted"> · </span>
-              <span className="font-medium text-danger">
+              <span className='text-text-muted'> · </span>
+              <span className='font-medium text-danger'>
                 {expenseLabel} {formatCurrency(cashFlow.total_expense)}
               </span>
             </p>
@@ -109,44 +109,44 @@ export function CashFlowChart({ cashFlow, isLoading }: CashFlowChartProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-56 w-full sm:h-64">
+        <div className='h-56 w-full sm:h-64'>
           {isLoading || !cashFlow || chartData.length === 0 ? (
-            <div className="flex h-full items-center justify-center text-sm text-text-muted">
-              {isLoading ? t("common.loading") : t("cashFlow.noData")}
+            <div className='flex h-full items-center justify-center text-sm text-text-muted'>
+              {isLoading ? t('common.loading') : t('cashFlow.noData')}
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width='100%' height='100%'>
               <BarChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 4 }}>
                 {yearTicks.length > 0 && (
                   <XAxis
-                    dataKey="key"
-                    type="category"
+                    dataKey='key'
+                    type='category'
                     ticks={yearTicks}
                     tickFormatter={(value: string) => value.slice(0, 4)}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "var(--text-muted)", fontSize: 11 }}
-                    interval="preserveStartEnd"
+                    tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                    interval='preserveStartEnd'
                   />
                 )}
                 <Tooltip
                   content={<ChartTooltip incomeLabel={incomeLabel} expenseLabel={expenseLabel} netLabel={netLabel} />}
-                  cursor={{ fill: "var(--surface-2)" }}
+                  cursor={{ fill: 'var(--surface-2)' }}
                 />
                 <Legend
-                  verticalAlign="top"
+                  verticalAlign='top'
                   height={24}
-                  formatter={(value) => (value === "income" ? incomeLabel : expenseLabel)}
-                  wrapperStyle={{ fontSize: 12, color: "var(--text-muted)" }}
+                  formatter={(value) => (value === 'income' ? incomeLabel : expenseLabel)}
+                  wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)' }}
                 />
-                <Bar dataKey="income" fill="var(--success)" radius={[2, 2, 0, 0]} isAnimationActive={false} />
-                <Bar dataKey="expense" fill="var(--danger)" radius={[2, 2, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey='income' fill='var(--success)' radius={[2, 2, 0, 0]} isAnimationActive={false} />
+                <Bar dataKey='expense' fill='var(--danger)' radius={[2, 2, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
         {chartData.length > 1 && (
-          <div className="mt-2 flex justify-between text-xs text-text-muted">
+          <div className='mt-2 flex justify-between text-xs text-text-muted'>
             <span>{formatMonthLabel(chartData[0].key)}</span>
             <span>{formatMonthLabel(chartData[chartData.length - 1].key)}</span>
           </div>

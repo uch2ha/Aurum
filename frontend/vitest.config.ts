@@ -1,5 +1,5 @@
-import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitest/config';
 
 // Separate from vite.config.ts (the app config) since the unit tests here
 // are plain-function tests over lib/ logic — no dev server, no proxy, no
@@ -12,10 +12,10 @@ export default defineConfig({
     // Mirrors tsconfig.app.json's "@/*" path mapping — Vite/Vitest don't
     // read tsconfig paths on their own, this is TypeScript-only otherwise.
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   test: {
-    environment: "jsdom",
+    environment: 'jsdom',
   },
 });

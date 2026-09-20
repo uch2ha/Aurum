@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Input, Label } from "@/components/ui/Input";
-import { useTranslation } from "@/lib/i18n";
-import { useAppSettings, useUpdateAppSettings } from "@/hooks/useSettings";
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Input, Label } from '@/components/ui/Input';
+import { useTranslation } from '@/lib/i18n';
+import { useAppSettings, useUpdateAppSettings } from '@/hooks/useSettings';
 
 const MIN_MONTHS = 1;
 const MAX_MONTHS = 24;
@@ -21,11 +21,11 @@ export function AlertThresholdsCard() {
   const { data: settings } = useAppSettings();
   const updateSettings = useUpdateAppSettings();
 
-  const [cashFlowMonths, setCashFlowMonths] = useState("");
-  const [netWorthMonths, setNetWorthMonths] = useState("");
-  const [riskyPercent, setRiskyPercent] = useState("");
-  const [idleCashAmount, setIdleCashAmount] = useState("");
-  const [idleCashDays, setIdleCashDays] = useState("");
+  const [cashFlowMonths, setCashFlowMonths] = useState('');
+  const [netWorthMonths, setNetWorthMonths] = useState('');
+  const [riskyPercent, setRiskyPercent] = useState('');
+  const [idleCashAmount, setIdleCashAmount] = useState('');
+  const [idleCashDays, setIdleCashDays] = useState('');
 
   useEffect(() => {
     if (!settings) return;
@@ -79,15 +79,15 @@ export function AlertThresholdsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("settings.alertsTitle")}</CardTitle>
+        <CardTitle>{t('settings.alertsTitle')}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <CardContent className='space-y-3'>
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3'>
           <div>
-            <Label htmlFor="cash-flow-threshold">{t("settings.negativeCashFlowThresholdLabel")}</Label>
+            <Label htmlFor='cash-flow-threshold'>{t('settings.negativeCashFlowThresholdLabel')}</Label>
             <Input
-              id="cash-flow-threshold"
-              type="number"
+              id='cash-flow-threshold'
+              type='number'
               min={MIN_MONTHS}
               max={MAX_MONTHS}
               step={1}
@@ -97,10 +97,10 @@ export function AlertThresholdsCard() {
             />
           </div>
           <div>
-            <Label htmlFor="net-worth-threshold">{t("settings.netWorthDeclineThresholdLabel")}</Label>
+            <Label htmlFor='net-worth-threshold'>{t('settings.netWorthDeclineThresholdLabel')}</Label>
             <Input
-              id="net-worth-threshold"
-              type="number"
+              id='net-worth-threshold'
+              type='number'
               min={MIN_MONTHS}
               max={MAX_MONTHS}
               step={1}
@@ -110,10 +110,10 @@ export function AlertThresholdsCard() {
             />
           </div>
           <div>
-            <Label htmlFor="risky-allocation-threshold">{t("settings.riskyAllocationThresholdLabel")}</Label>
+            <Label htmlFor='risky-allocation-threshold'>{t('settings.riskyAllocationThresholdLabel')}</Label>
             <Input
-              id="risky-allocation-threshold"
-              type="number"
+              id='risky-allocation-threshold'
+              type='number'
               min={MIN_PERCENT}
               max={MAX_PERCENT}
               step={1}
@@ -123,10 +123,10 @@ export function AlertThresholdsCard() {
             />
           </div>
           <div>
-            <Label htmlFor="idle-cash-amount-threshold">{t("settings.idleCashThresholdAmountLabel")}</Label>
+            <Label htmlFor='idle-cash-amount-threshold'>{t('settings.idleCashThresholdAmountLabel')}</Label>
             <Input
-              id="idle-cash-amount-threshold"
-              type="number"
+              id='idle-cash-amount-threshold'
+              type='number'
               min={MIN_AMOUNT}
               step={0.01}
               value={idleCashAmount}
@@ -135,10 +135,10 @@ export function AlertThresholdsCard() {
             />
           </div>
           <div>
-            <Label htmlFor="idle-cash-days-threshold">{t("settings.idleCashThresholdDaysLabel")}</Label>
+            <Label htmlFor='idle-cash-days-threshold'>{t('settings.idleCashThresholdDaysLabel')}</Label>
             <Input
-              id="idle-cash-days-threshold"
-              type="number"
+              id='idle-cash-days-threshold'
+              type='number'
               min={MIN_DAYS}
               max={MAX_DAYS}
               step={1}
@@ -148,7 +148,7 @@ export function AlertThresholdsCard() {
             />
           </div>
         </div>
-        <p className="text-xs text-text-muted">{t("settings.alertsHint")}</p>
+        <p className='text-xs text-text-muted'>{t('settings.alertsHint')}</p>
       </CardContent>
     </Card>
   );

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Dialog } from "@/components/ui/Dialog";
-import { Button } from "@/components/ui/Button";
-import { Input, Label, Select } from "@/components/ui/Input";
-import { useCreateAccount, useUpdateAccount } from "@/hooks/useAccounts";
-import { useTranslation, type TranslationKey } from "@/lib/i18n";
-import type { Account, AccountType } from "@/types";
+import { useEffect, useState } from 'react';
+import { Dialog } from '@/components/ui/Dialog';
+import { Button } from '@/components/ui/Button';
+import { Input, Label, Select } from '@/components/ui/Input';
+import { useCreateAccount, useUpdateAccount } from '@/hooks/useAccounts';
+import { useTranslation, type TranslationKey } from '@/lib/i18n';
+import type { Account, AccountType } from '@/types';
 
 interface AccountFormModalProps {
   open: boolean;
@@ -12,9 +12,17 @@ interface AccountFormModalProps {
   account?: Account | null;
 }
 
-const ACCOUNT_TYPES: AccountType[] = ["checking", "debit_card", "savings", "credit_card", "cash", "investment", "other"];
+const ACCOUNT_TYPES: AccountType[] = [
+  'checking',
+  'debit_card',
+  'savings',
+  'credit_card',
+  'cash',
+  'investment',
+  'other',
+];
 
-const EMPTY_FORM = { name: "", type: "checking" as AccountType };
+const EMPTY_FORM = { name: '', type: 'checking' as AccountType };
 
 export function AccountFormModal({ open, onClose, account }: AccountFormModalProps) {
   const { t } = useTranslation();
@@ -44,28 +52,28 @@ export function AccountFormModal({ open, onClose, account }: AccountFormModalPro
       }
       onClose();
     } catch {
-      setError(t("account.form.saveError"));
+      setError(t('account.form.saveError'));
     }
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title={account ? t("account.form.editTitle") : t("account.form.newTitle")}>
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <Dialog open={open} onClose={onClose} title={account ? t('account.form.editTitle') : t('account.form.newTitle')}>
+      <form onSubmit={handleSubmit} className='space-y-3'>
         <div>
-          <Label htmlFor="account-name">{t("account.form.nameLabel")}</Label>
+          <Label htmlFor='account-name'>{t('account.form.nameLabel')}</Label>
           <Input
-            id="account-name"
+            id='account-name'
             required
-            placeholder={t("account.form.namePlaceholder")}
+            placeholder={t('account.form.namePlaceholder')}
             value={form.name}
             onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
           />
         </div>
 
         <div>
-          <Label htmlFor="account-type">{t("account.form.typeLabel")}</Label>
+          <Label htmlFor='account-type'>{t('account.form.typeLabel')}</Label>
           <Select
-            id="account-type"
+            id='account-type'
             value={form.type}
             onChange={(event) => setForm((prev) => ({ ...prev, type: event.target.value as AccountType }))}
           >
@@ -77,14 +85,14 @@ export function AccountFormModal({ open, onClose, account }: AccountFormModalPro
           </Select>
         </div>
 
-        {error && <p className="text-sm text-danger">{error}</p>}
+        {error && <p className='text-sm text-danger'>{error}</p>}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            {t("common.cancel")}
+        <div className='flex justify-end gap-2 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose}>
+            {t('common.cancel')}
           </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("common.saving") : t("common.save")}
+          <Button type='submit' disabled={isSaving}>
+            {isSaving ? t('common.saving') : t('common.save')}
           </Button>
         </div>
       </form>

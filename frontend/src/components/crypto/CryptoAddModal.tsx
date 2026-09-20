@@ -1,14 +1,14 @@
-import { type FormEvent, useEffect, useState } from "react";
-import { ApiError } from "@/api/client";
-import { searchCryptoCoins } from "@/api/crypto";
-import { Button } from "@/components/ui/Button";
-import { Dialog } from "@/components/ui/Dialog";
-import { Input, Label, Select } from "@/components/ui/Input";
-import { useCreateCryptoHolding, useCryptoHoldings, useCryptoPortfolios } from "@/hooks/useCrypto";
-import { useTranslation, type TranslationKey } from "@/lib/i18n";
-import type { CryptoSearchResult, RiskLevel } from "@/types";
+import { type FormEvent, useEffect, useState } from 'react';
+import { ApiError } from '@/api/client';
+import { searchCryptoCoins } from '@/api/crypto';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { Input, Label, Select } from '@/components/ui/Input';
+import { useCreateCryptoHolding, useCryptoHoldings, useCryptoPortfolios } from '@/hooks/useCrypto';
+import { useTranslation, type TranslationKey } from '@/lib/i18n';
+import type { CryptoSearchResult, RiskLevel } from '@/types';
 
-const RISK_LEVELS: RiskLevel[] = ["low", "medium", "high"];
+const RISK_LEVELS: RiskLevel[] = ['low', 'medium', 'high'];
 
 interface CryptoAddModalProps {
   open: boolean;
@@ -31,34 +31,34 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
   // fixed list — see CryptoHolding.network).
   const { data: allHoldings } = useCryptoHoldings();
   const knownNetworks = Array.from(
-    new Set((allHoldings?.holdings ?? []).map((h) => h.network).filter((n): n is string => Boolean(n)))
+    new Set((allHoldings?.holdings ?? []).map((h) => h.network).filter((n): n is string => Boolean(n))),
   ).sort();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [results, setResults] = useState<CryptoSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selected, setSelected] = useState<CryptoSearchResult | null>(null);
   const [portfolioId, setPortfolioId] = useState<number | null>(null);
-  const [quantity, setQuantity] = useState("");
-  const [pricePerUnit, setPricePerUnit] = useState("");
+  const [quantity, setQuantity] = useState('');
+  const [pricePerUnit, setPricePerUnit] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   // Defaults to "high", same as the backend default — crypto is this app's
   // own textbook HIGH risk example — but overridable per coin here.
-  const [riskLevel, setRiskLevel] = useState<RiskLevel>("high");
-  const [network, setNetwork] = useState("");
+  const [riskLevel, setRiskLevel] = useState<RiskLevel>('high');
+  const [network, setNetwork] = useState('');
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) return;
-    setQuery("");
+    setQuery('');
     setResults([]);
     setSelected(null);
-    setQuantity("");
-    setPricePerUnit("");
+    setQuantity('');
+    setPricePerUnit('');
     setDate(new Date().toISOString().slice(0, 10));
-    setRiskLevel("high");
-    setNetwork("");
+    setRiskLevel('high');
+    setNetwork('');
     setSearchError(null);
     setSaveError(null);
   }, [open]);
@@ -71,7 +71,9 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
     if (defaultPortfolioId != null) {
       setPortfolioId(defaultPortfolioId);
     } else if (portfolios && portfolios.length > 0) {
-      setPortfolioId((current) => (current !== null && portfolios.some((p) => p.id === current) ? current : portfolios[0].id));
+      setPortfolioId((current) =>
+        current !== null && portfolios.some((p) => p.id === current) ? current : portfolios[0].id,
+      );
     }
   }, [open, defaultPortfolioId, portfolios]);
 
@@ -91,7 +93,7 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
       } catch (error) {
         setResults([]);
         setSearchError(
-          error instanceof ApiError && error.status === 400 ? t("crypto.search.noApiKey") : t("crypto.form.saveError")
+          error instanceof ApiError && error.status === 400 ? t('crypto.search.noApiKey') : t('crypto.form.saveError'),
         );
       } finally {
         setSearching(false);
@@ -119,7 +121,7 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
       });
       onClose();
     } catch {
-      setSaveError(t("crypto.form.saveError"));
+      setSaveError(t('crypto.form.saveError'));
     }
   }
 
@@ -127,40 +129,40 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
     <Dialog
       open={open}
       onClose={onClose}
-      title={selected ? t("crypto.form.addTitle", { name: selected.name }) : t("crypto.addButton")}
+      title={selected ? t('crypto.form.addTitle', { name: selected.name }) : t('crypto.addButton')}
     >
       {!selected ? (
-        <div className="space-y-3">
+        <div className='space-y-3'>
           <Input
             autoFocus
-            placeholder={t("crypto.search.placeholder")}
+            placeholder={t('crypto.search.placeholder')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
-          {searchError && <p className="text-sm text-danger">{searchError}</p>}
+          {searchError && <p className='text-sm text-danger'>{searchError}</p>}
           {!searchError && query.trim().length < 2 && (
-            <p className="text-sm text-text-muted">{t("crypto.search.hint")}</p>
+            <p className='text-sm text-text-muted'>{t('crypto.search.hint')}</p>
           )}
-          {searching && <p className="text-sm text-text-muted">{t("common.loading")}</p>}
+          {searching && <p className='text-sm text-text-muted'>{t('common.loading')}</p>}
           {!searching && !searchError && query.trim().length >= 2 && results.length === 0 && (
-            <p className="text-sm text-text-muted">{t("crypto.search.empty")}</p>
+            <p className='text-sm text-text-muted'>{t('crypto.search.empty')}</p>
           )}
-          <ul className="max-h-72 space-y-1 overflow-y-auto">
+          <ul className='max-h-72 space-y-1 overflow-y-auto'>
             {results.map((coin) => (
               <li key={coin.coingecko_id}>
                 <button
-                  type="button"
+                  type='button'
                   onClick={() => setSelected(coin)}
-                  className="flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-surface-2"
+                  className='flex w-full items-center gap-3 rounded-lg p-2 text-left hover:bg-surface-2'
                 >
                   {coin.thumb_url ? (
-                    <img src={coin.thumb_url} alt="" className="h-6 w-6 shrink-0 rounded-full" />
+                    <img src={coin.thumb_url} alt='' className='h-6 w-6 shrink-0 rounded-full' />
                   ) : (
-                    <span className="h-6 w-6 shrink-0 rounded-full bg-surface-2" />
+                    <span className='h-6 w-6 shrink-0 rounded-full bg-surface-2' />
                   )}
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium text-text-primary">{coin.name}</span>
-                    <span className="block text-xs text-text-muted">{coin.symbol}</span>
+                  <span className='min-w-0 flex-1'>
+                    <span className='block truncate text-sm font-medium text-text-primary'>{coin.name}</span>
+                    <span className='block text-xs text-text-muted'>{coin.symbol}</span>
                   </span>
                 </button>
               </li>
@@ -168,25 +170,25 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
           </ul>
         </div>
       ) : (
-        <form onSubmit={handleSave} className="space-y-3">
-          <div className="flex items-center gap-3 rounded-lg bg-surface-2 p-2">
+        <form onSubmit={handleSave} className='space-y-3'>
+          <div className='flex items-center gap-3 rounded-lg bg-surface-2 p-2'>
             {selected.thumb_url ? (
-              <img src={selected.thumb_url} alt="" className="h-6 w-6 shrink-0 rounded-full" />
+              <img src={selected.thumb_url} alt='' className='h-6 w-6 shrink-0 rounded-full' />
             ) : (
-              <span className="h-6 w-6 shrink-0 rounded-full bg-surface-1" />
+              <span className='h-6 w-6 shrink-0 rounded-full bg-surface-1' />
             )}
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium text-text-primary">{selected.name}</span>
-              <span className="block text-xs text-text-muted">{selected.symbol}</span>
+            <span className='min-w-0 flex-1'>
+              <span className='block truncate text-sm font-medium text-text-primary'>{selected.name}</span>
+              <span className='block text-xs text-text-muted'>{selected.symbol}</span>
             </span>
           </div>
 
           {portfolios && portfolios.length > 1 && (
             <div>
-              <Label htmlFor="crypto-portfolio">{t("crypto.portfolio.form.nameLabel")}</Label>
+              <Label htmlFor='crypto-portfolio'>{t('crypto.portfolio.form.nameLabel')}</Label>
               <Select
-                id="crypto-portfolio"
-                value={portfolioId ?? ""}
+                id='crypto-portfolio'
+                value={portfolioId ?? ''}
                 onChange={(event) => setPortfolioId(Number(event.target.value))}
               >
                 {portfolios.map((portfolio) => (
@@ -198,14 +200,14 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className='grid grid-cols-2 gap-3'>
             <div>
-              <Label htmlFor="crypto-quantity">{t("crypto.form.quantityLabel")}</Label>
+              <Label htmlFor='crypto-quantity'>{t('crypto.form.quantityLabel')}</Label>
               <Input
-                id="crypto-quantity"
-                type="number"
-                step="any"
-                min="0"
+                id='crypto-quantity'
+                type='number'
+                step='any'
+                min='0'
                 required
                 autoFocus
                 value={quantity}
@@ -213,12 +215,12 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
               />
             </div>
             <div>
-              <Label htmlFor="crypto-price">{t("crypto.form.pricePerUnitLabel")}</Label>
+              <Label htmlFor='crypto-price'>{t('crypto.form.pricePerUnitLabel')}</Label>
               <Input
-                id="crypto-price"
-                type="number"
-                step="any"
-                min="0"
+                id='crypto-price'
+                type='number'
+                step='any'
+                min='0'
                 required
                 value={pricePerUnit}
                 onChange={(event) => setPricePerUnit(event.target.value)}
@@ -227,10 +229,10 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
           </div>
 
           <div>
-            <Label htmlFor="crypto-date">{t("crypto.form.dateLabel")}</Label>
+            <Label htmlFor='crypto-date'>{t('crypto.form.dateLabel')}</Label>
             <Input
-              id="crypto-date"
-              type="date"
+              id='crypto-date'
+              type='date'
               required
               value={date}
               onChange={(event) => setDate(event.target.value)}
@@ -238,9 +240,9 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
           </div>
 
           <div>
-            <Label htmlFor="crypto-risk">{t("netWorth.form.riskLevelLabel")}</Label>
+            <Label htmlFor='crypto-risk'>{t('netWorth.form.riskLevelLabel')}</Label>
             <Select
-              id="crypto-risk"
+              id='crypto-risk'
               value={riskLevel}
               onChange={(event) => setRiskLevel(event.target.value as RiskLevel)}
             >
@@ -253,29 +255,29 @@ export function CryptoAddModal({ open, onClose, defaultPortfolioId }: CryptoAddM
           </div>
 
           <div>
-            <Label htmlFor="crypto-network">{t("crypto.form.networkLabel")}</Label>
+            <Label htmlFor='crypto-network'>{t('crypto.form.networkLabel')}</Label>
             <Input
-              id="crypto-network"
-              list="crypto-known-networks"
-              placeholder={t("crypto.form.networkPlaceholder")}
+              id='crypto-network'
+              list='crypto-known-networks'
+              placeholder={t('crypto.form.networkPlaceholder')}
               value={network}
               onChange={(event) => setNetwork(event.target.value.toUpperCase())}
             />
-            <datalist id="crypto-known-networks">
+            <datalist id='crypto-known-networks'>
               {knownNetworks.map((name) => (
                 <option key={name} value={name} />
               ))}
             </datalist>
           </div>
 
-          {saveError && <p className="text-sm text-danger">{saveError}</p>}
+          {saveError && <p className='text-sm text-danger'>{saveError}</p>}
 
-          <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="ghost" onClick={() => setSelected(null)}>
-              {t("common.back")}
+          <div className='flex justify-end gap-2 pt-2'>
+            <Button type='button' variant='ghost' onClick={() => setSelected(null)}>
+              {t('common.back')}
             </Button>
-            <Button type="submit" disabled={createHolding.isPending}>
-              {createHolding.isPending ? t("common.saving") : t("common.save")}
+            <Button type='submit' disabled={createHolding.isPending}>
+              {createHolding.isPending ? t('common.saving') : t('common.save')}
             </Button>
           </div>
         </form>

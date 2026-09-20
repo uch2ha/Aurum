@@ -1,5 +1,5 @@
-import { useId, useState } from "react";
-import { useTranslation } from "@/lib/i18n";
+import { useEffect, useId, useRef, useState } from 'react';
+import { useTranslation } from '@/lib/i18n';
 
 interface NetworkPickerProps {
   value: string | null;
@@ -15,32 +15,38 @@ interface NetworkPickerProps {
 export function NetworkPicker({ value, knownNetworks, onChange }: NetworkPickerProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState(value ?? "");
+  const [draft, setDraft] = useState(value ?? '');
   const listId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
 
   function commit() {
     setOpen(false);
     const trimmed = draft.trim();
-    if (trimmed !== (value ?? "")) onChange(trimmed || null);
+    if (trimmed !== (value ?? '')) onChange(trimmed || null);
   }
 
   if (open) {
     return (
       <>
         <input
-          autoFocus
+          ref={inputRef}
           list={listId}
           value={draft}
           onChange={(event) => setDraft(event.target.value.toUpperCase())}
+          onClick={(event) => event.stopPropagation()}
           onBlur={commit}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === 'Enter') {
               event.preventDefault();
               commit();
             }
-            if (event.key === "Escape") setOpen(false);
+            if (event.key === 'Escape') setOpen(false);
           }}
-          className="w-28 rounded-md border border-border bg-surface-2 px-1.5 py-0.5 text-xs text-text-primary outline-none"
+          className='w-28 rounded-md border border-border bg-surface-2 px-1.5 py-0.5 text-xs text-text-primary outline-none'
         />
         <datalist id={listId}>
           {knownNetworks.map((name) => (
@@ -53,15 +59,16 @@ export function NetworkPicker({ value, knownNetworks, onChange }: NetworkPickerP
 
   return (
     <button
-      type="button"
-      onClick={() => {
-        setDraft(value ?? "");
+      type='button'
+      onClick={(event) => {
+        event.stopPropagation();
+        setDraft(value ?? '');
         setOpen(true);
       }}
       title={value ?? undefined}
-      className="max-w-[100px] truncate rounded px-1.5 py-0.5 text-right text-xs text-text-muted hover:bg-surface-2 hover:text-text-primary"
+      className='max-w-[100px] truncate rounded px-1.5 py-0.5 text-right text-xs text-text-muted hover:bg-surface-2 hover:text-text-primary'
     >
-      {value ?? t("crypto.table.addNetwork")}
+      {value ?? t('crypto.table.addNetwork')}
     </button>
   );
 }

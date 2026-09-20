@@ -1,15 +1,15 @@
-import { useMemo, useState } from "react";
-import { Plus, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { CryptoAddModal } from "@/components/crypto/CryptoAddModal";
-import { CryptoHoldingsTable } from "@/components/crypto/CryptoHoldingsTable";
-import { CryptoOverviewCard } from "@/components/crypto/CryptoOverviewCard";
-import { CryptoPortfolioFormModal } from "@/components/crypto/CryptoPortfolioFormModal";
-import { CryptoPortfolioTabs } from "@/components/crypto/CryptoPortfolioTabs";
-import { CryptoStatsRow } from "@/components/crypto/CryptoStatsRow";
-import { CryptoTransactionHistoryModal } from "@/components/crypto/CryptoTransactionHistoryModal";
-import { CryptoTransactionModal } from "@/components/crypto/CryptoTransactionModal";
+import { useMemo, useState } from 'react';
+import { Plus, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { CryptoAddModal } from '@/components/crypto/CryptoAddModal';
+import { CryptoHoldingsTable } from '@/components/crypto/CryptoHoldingsTable';
+import { CryptoOverviewCard } from '@/components/crypto/CryptoOverviewCard';
+import { CryptoPortfolioFormModal } from '@/components/crypto/CryptoPortfolioFormModal';
+import { CryptoPortfolioTabs } from '@/components/crypto/CryptoPortfolioTabs';
+import { CryptoStatsRow } from '@/components/crypto/CryptoStatsRow';
+import { CryptoTransactionHistoryModal } from '@/components/crypto/CryptoTransactionHistoryModal';
+import { CryptoTransactionModal } from '@/components/crypto/CryptoTransactionModal';
 import {
   useCrypto90dPerformance,
   useCryptoHistory,
@@ -19,20 +19,20 @@ import {
   useRefreshCryptoPrices,
   useUpdateCryptoHolding,
   useUpdateCryptoHoldingRisk,
-} from "@/hooks/useCrypto";
-import { getIntlLocale } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
-import type { CryptoHolding, CryptoPortfolio, CryptoRange, CryptoTransaction, RiskLevel } from "@/types";
+} from '@/hooks/useCrypto';
+import { getIntlLocale } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
+import type { CryptoHolding, CryptoPortfolio, CryptoRange, CryptoTransaction, RiskLevel } from '@/types';
 
 function formatSyncedAt(iso: string): string {
-  return new Intl.DateTimeFormat(getIntlLocale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
+  return new Intl.DateTimeFormat(getIntlLocale(), { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
 }
 
 export function CryptoPage() {
   const { t } = useTranslation();
   // "all" by default — a 30-day window makes a portfolio that's actually
   // grown steadily for years look demotivating whenever it's mid-dip.
-  const [range, setRange] = useState<CryptoRange>("all");
+  const [range, setRange] = useState<CryptoRange>('all');
   // Single "hide balance" switch for the whole tab — owned here so every
   // money-displaying section (chart, stats, allocation, table, trade
   // history) masks together instead of the toggle only affecting whichever
@@ -65,7 +65,7 @@ export function CryptoPage() {
   const portfoliosById = useMemo(() => new Map((portfolios ?? []).map((p) => [p.id, p])), [portfolios]);
   const performance90dByAsset = useMemo(
     () => new Map((performance90d?.items ?? []).map((item) => [item.asset_id, item.price_change_percent])),
-    [performance90d]
+    [performance90d],
   );
 
   function openAddPortfolioModal() {
@@ -79,7 +79,7 @@ export function CryptoPage() {
   }
 
   function handleDelete(holding: CryptoHolding) {
-    if (window.confirm(t("crypto.confirmDelete", { name: holding.name }))) {
+    if (window.confirm(t('crypto.confirmDelete', { name: holding.name }))) {
       deleteHolding.mutate(holding.asset_id);
     }
   }
@@ -109,7 +109,7 @@ export function CryptoPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className='space-y-5'>
       <CryptoPortfolioTabs
         portfolios={portfolios ?? []}
         activeId={portfolioFilter}
@@ -140,32 +140,32 @@ export function CryptoPage() {
       />
 
       <Card>
-        <CardHeader className="flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+        <CardHeader className='flex-col items-stretch gap-3 sm:flex-row sm:items-center'>
           <div>
-            <CardTitle>{t("crypto.holdingsTitle")}</CardTitle>
-            <p className="mt-0.5 text-xs text-text-muted">
+            <CardTitle>{t('crypto.holdingsTitle')}</CardTitle>
+            <p className='mt-0.5 text-xs text-text-muted'>
               {data?.last_synced_at
-                ? t("crypto.lastSynced", { time: formatSyncedAt(data.last_synced_at) })
-                : t("crypto.neverSynced")}
+                ? t('crypto.lastSynced', { time: formatSyncedAt(data.last_synced_at) })
+                : t('crypto.neverSynced')}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
-              <RefreshCw size={16} className={refresh.isPending ? "animate-spin" : undefined} />
-              {refresh.isPending ? t("crypto.refreshing") : t("crypto.refreshButton")}
+          <div className='flex flex-wrap gap-2'>
+            <Button variant='secondary' onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+              <RefreshCw size={16} className={refresh.isPending ? 'animate-spin' : undefined} />
+              {refresh.isPending ? t('crypto.refreshing') : t('crypto.refreshButton')}
             </Button>
             <Button onClick={() => setAddOpen(true)}>
               <Plus size={16} />
-              {t("crypto.addButton")}
+              {t('crypto.addButton')}
             </Button>
           </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="py-10 text-center text-sm text-text-muted">{t("common.loading")}</p>
+            <p className='py-10 text-center text-sm text-text-muted'>{t('common.loading')}</p>
           ) : (
             <>
-              {data?.error_key && <p className="mb-3 text-sm text-danger">{t(`crypto.syncError.${data.error_key}`)}</p>}
+              {data?.error_key && <p className='mb-3 text-sm text-danger'>{t(`crypto.syncError.${data.error_key}`)}</p>}
               <CryptoHoldingsTable
                 items={holdings}
                 hidden={hidden}

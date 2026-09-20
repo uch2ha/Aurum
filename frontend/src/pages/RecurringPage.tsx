@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { RecurringList } from "@/components/recurring/RecurringList";
-import { RecurringFormModal } from "@/components/recurring/RecurringFormModal";
-import { useDeleteRecurring, usePostRecurring, useRecurring } from "@/hooks/useRecurring";
-import { useTranslation } from "@/lib/i18n";
-import type { RecurringTransaction } from "@/types";
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { RecurringList } from '@/components/recurring/RecurringList';
+import { RecurringFormModal } from '@/components/recurring/RecurringFormModal';
+import { useDeleteRecurring, usePostRecurring, useRecurring } from '@/hooks/useRecurring';
+import { useTranslation } from '@/lib/i18n';
+import type { RecurringTransaction } from '@/types';
 
 export function RecurringPage() {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ export function RecurringPage() {
   }
 
   function handleDelete(item: RecurringTransaction) {
-    if (window.confirm(t("recurring.confirmDelete", { name: item.description }))) {
+    if (window.confirm(t('recurring.confirmDelete', { name: item.description }))) {
       deleteRecurring.mutate(item.id);
     }
   }
@@ -38,18 +38,18 @@ export function RecurringPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className='space-y-5'>
       <Card>
         <CardHeader>
-          <CardTitle>{t("nav.recurring")}</CardTitle>
+          <CardTitle>{t('nav.recurring')}</CardTitle>
           <Button onClick={openCreateModal}>
             <Plus size={16} />
-            {t("common.add")}
+            {t('common.add')}
           </Button>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="py-10 text-center text-sm text-text-muted">{t("common.loading")}</p>
+            <p className='py-10 text-center text-sm text-text-muted'>{t('common.loading')}</p>
           ) : (
             <RecurringList
               items={items ?? []}

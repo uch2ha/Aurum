@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { MonthSelector } from "@/components/layout/MonthSelector";
-import { YearSelector } from "@/components/layout/YearSelector";
-import { AlertBanner } from "@/components/insights/AlertBanner";
-import { BudgetList } from "@/components/budget/BudgetList";
-import { BudgetFormModal } from "@/components/budget/BudgetFormModal";
-import { useBudgets, useBudgetStatus, useDeleteBudget } from "@/hooks/useBudgets";
-import { useTransactionYears } from "@/hooks/useTransactions";
-import { useTranslation } from "@/lib/i18n";
-import { translateCategoryName } from "@/lib/categoryLabels";
-import type { Budget, BudgetStatus } from "@/types";
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { MonthSelector } from '@/components/layout/MonthSelector';
+import { YearSelector } from '@/components/layout/YearSelector';
+import { AlertBanner } from '@/components/insights/AlertBanner';
+import { BudgetList } from '@/components/budget/BudgetList';
+import { BudgetFormModal } from '@/components/budget/BudgetFormModal';
+import { useBudgets, useBudgetStatus, useDeleteBudget } from '@/hooks/useBudgets';
+import { useTransactionYears } from '@/hooks/useTransactions';
+import { useTranslation } from '@/lib/i18n';
+import { translateCategoryName } from '@/lib/categoryLabels';
+import type { Budget, BudgetStatus } from '@/types';
 
 export function BudgetPage() {
   const { t } = useTranslation();
@@ -45,17 +45,17 @@ export function BudgetPage() {
   }
 
   function handleDelete(item: BudgetStatus) {
-    if (window.confirm(t("budget.confirmDelete", { name: translateCategoryName(item.category_name) }))) {
+    if (window.confirm(t('budget.confirmDelete', { name: translateCategoryName(item.category_name) }))) {
       deleteBudget.mutate(item.budget_id);
     }
   }
 
   return (
-    <div className="space-y-5">
+    <div className='space-y-5'>
       <AlertBanner />
 
-      <div className="flex items-center gap-3">
-        <div className="min-w-0 flex-1">
+      <div className='flex items-center gap-3'>
+        <div className='min-w-0 flex-1'>
           <MonthSelector month={month} onChange={setMonth} />
         </div>
         <YearSelector years={years ?? [now.getFullYear()]} year={year} onChange={setYear} />
@@ -63,15 +63,15 @@ export function BudgetPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("nav.budget")}</CardTitle>
+          <CardTitle>{t('nav.budget')}</CardTitle>
           <Button onClick={openCreateModal}>
             <Plus size={16} />
-            {t("common.add")}
+            {t('common.add')}
           </Button>
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="py-10 text-center text-sm text-text-muted">{t("common.loading")}</p>
+            <p className='py-10 text-center text-sm text-text-muted'>{t('common.loading')}</p>
           ) : (
             <BudgetList items={status?.items ?? []} onEdit={openEditModal} onDelete={handleDelete} />
           )}

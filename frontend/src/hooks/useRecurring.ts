@@ -1,34 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  createRecurring,
-  deleteRecurring,
-  fetchRecurring,
-  postRecurring,
-  updateRecurring,
-} from "@/api/recurring";
-import type { RecurringTransactionInput } from "@/types";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createRecurring, deleteRecurring, fetchRecurring, postRecurring, updateRecurring } from '@/api/recurring';
+import type { RecurringTransactionInput } from '@/types';
 
 function useInvalidateRecurring() {
   const queryClient = useQueryClient();
   return (alsoInvalidateTransactions: boolean) => {
-    queryClient.invalidateQueries({ queryKey: ["recurring"] });
+    queryClient.invalidateQueries({ queryKey: ['recurring'] });
     if (alsoInvalidateTransactions) {
       // Posting creates a real Transaction — refresh everything derived from it.
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["net-worth-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["category-spending-report"] });
-      queryClient.invalidateQueries({ queryKey: ["category-ranking"] });
-      queryClient.invalidateQueries({ queryKey: ["budget-status"] });
-      queryClient.invalidateQueries({ queryKey: ["financial-alerts"] });
-      queryClient.invalidateQueries({ queryKey: ["advice"] });
-      queryClient.invalidateQueries({ queryKey: ["cash-flow"] });
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['net-worth-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['category-spending-report'] });
+      queryClient.invalidateQueries({ queryKey: ['category-ranking'] });
+      queryClient.invalidateQueries({ queryKey: ['budget-status'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-alerts'] });
+      queryClient.invalidateQueries({ queryKey: ['advice'] });
+      queryClient.invalidateQueries({ queryKey: ['cash-flow'] });
     }
   };
 }
 
 export function useRecurring() {
-  return useQuery({ queryKey: ["recurring"], queryFn: fetchRecurring });
+  return useQuery({ queryKey: ['recurring'], queryFn: fetchRecurring });
 }
 
 export function useCreateRecurring() {

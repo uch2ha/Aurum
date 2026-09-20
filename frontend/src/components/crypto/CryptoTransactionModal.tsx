@@ -1,13 +1,13 @@
-import { type FormEvent, useEffect, useState } from "react";
-import { ApiError } from "@/api/client";
-import { Button } from "@/components/ui/Button";
-import { Dialog } from "@/components/ui/Dialog";
-import { Input, Label } from "@/components/ui/Input";
-import { useAddCryptoTransaction, useUpdateCryptoTransaction } from "@/hooks/useCrypto";
-import { trimTrailingZeros } from "@/lib/format";
-import { useTranslation } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
-import type { CryptoHolding, CryptoTransaction, CryptoTransactionType } from "@/types";
+import { type FormEvent, useEffect, useState } from 'react';
+import { ApiError } from '@/api/client';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { Input, Label } from '@/components/ui/Input';
+import { useAddCryptoTransaction, useUpdateCryptoTransaction } from '@/hooks/useCrypto';
+import { trimTrailingZeros } from '@/lib/format';
+import { useTranslation } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
+import type { CryptoHolding, CryptoTransaction, CryptoTransactionType } from '@/types';
 
 interface CryptoTransactionModalProps {
   open: boolean;
@@ -29,11 +29,11 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
   const updateTransaction = useUpdateCryptoTransaction();
   const isEditing = transaction !== null;
 
-  const [type, setType] = useState<CryptoTransactionType>("buy");
-  const [quantity, setQuantity] = useState("");
-  const [pricePerUnit, setPricePerUnit] = useState("");
+  const [type, setType] = useState<CryptoTransactionType>('buy');
+  const [quantity, setQuantity] = useState('');
+  const [pricePerUnit, setPricePerUnit] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,16 +46,16 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
       setQuantity(trimTrailingZeros(transaction.quantity));
       setPricePerUnit(trimTrailingZeros(transaction.price_per_unit));
       setDate(transaction.date);
-      setNote(transaction.note ?? "");
+      setNote(transaction.note ?? '');
     } else {
-      setType("buy");
-      setQuantity("");
-      setPricePerUnit("");
+      setType('buy');
+      setQuantity('');
+      setPricePerUnit('');
       setDate(new Date().toISOString().slice(0, 10));
-      setNote("");
+      setNote('');
     }
     setError(null);
-  }, [open, holding, transaction]);
+  }, [open, transaction]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -71,7 +71,7 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
       onClose();
     } catch (err) {
       setError(
-        err instanceof ApiError && err.status === 400 ? t("crypto.form.errorSellTooMuch") : t("crypto.form.saveError")
+        err instanceof ApiError && err.status === 400 ? t('crypto.form.errorSellTooMuch') : t('crypto.form.saveError'),
       );
     }
   }
@@ -84,40 +84,44 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
     <Dialog
       open={open}
       onClose={onClose}
-      title={isEditing ? t("crypto.form.editTradeTitle", { name: holding.name }) : t("crypto.form.tradeTitle", { name: holding.name })}
+      title={
+        isEditing
+          ? t('crypto.form.editTradeTitle', { name: holding.name })
+          : t('crypto.form.tradeTitle', { name: holding.name })
+      }
     >
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="grid grid-cols-2 gap-2">
+      <form onSubmit={handleSubmit} className='space-y-3'>
+        <div className='grid grid-cols-2 gap-2'>
           <button
-            type="button"
-            onClick={() => setType("buy")}
+            type='button'
+            onClick={() => setType('buy')}
             className={cn(
-              "rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
-              type === "buy" ? "border-success bg-success/10 text-success" : "border-border text-text-secondary"
+              'rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+              type === 'buy' ? 'border-success bg-success/10 text-success' : 'border-border text-text-secondary',
             )}
           >
-            {t("crypto.form.buy")}
+            {t('crypto.form.buy')}
           </button>
           <button
-            type="button"
-            onClick={() => setType("sell")}
+            type='button'
+            onClick={() => setType('sell')}
             className={cn(
-              "rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
-              type === "sell" ? "border-danger bg-danger/10 text-danger" : "border-border text-text-secondary"
+              'rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
+              type === 'sell' ? 'border-danger bg-danger/10 text-danger' : 'border-border text-text-secondary',
             )}
           >
-            {t("crypto.form.sell")}
+            {t('crypto.form.sell')}
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className='grid grid-cols-2 gap-3'>
           <div>
-            <Label htmlFor="tx-quantity">{t("crypto.form.quantityLabel")}</Label>
+            <Label htmlFor='tx-quantity'>{t('crypto.form.quantityLabel')}</Label>
             <Input
-              id="tx-quantity"
-              type="number"
-              step="any"
-              min="0"
+              id='tx-quantity'
+              type='number'
+              step='any'
+              min='0'
               required
               autoFocus
               value={quantity}
@@ -125,12 +129,12 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
             />
           </div>
           <div>
-            <Label htmlFor="tx-price">{t("crypto.form.pricePerUnitLabel")}</Label>
+            <Label htmlFor='tx-price'>{t('crypto.form.pricePerUnitLabel')}</Label>
             <Input
-              id="tx-price"
-              type="number"
-              step="any"
-              min="0"
+              id='tx-price'
+              type='number'
+              step='any'
+              min='0'
               required
               value={pricePerUnit}
               onChange={(event) => setPricePerUnit(event.target.value)}
@@ -139,23 +143,23 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
         </div>
 
         <div>
-          <Label htmlFor="tx-date">{t("crypto.form.dateLabel")}</Label>
-          <Input id="tx-date" type="date" required value={date} onChange={(event) => setDate(event.target.value)} />
+          <Label htmlFor='tx-date'>{t('crypto.form.dateLabel')}</Label>
+          <Input id='tx-date' type='date' required value={date} onChange={(event) => setDate(event.target.value)} />
         </div>
 
         <div>
-          <Label htmlFor="tx-note">{t("crypto.form.noteLabel")}</Label>
-          <Input id="tx-note" value={note} onChange={(event) => setNote(event.target.value)} />
+          <Label htmlFor='tx-note'>{t('crypto.form.noteLabel')}</Label>
+          <Input id='tx-note' value={note} onChange={(event) => setNote(event.target.value)} />
         </div>
 
-        {error && <p className="text-sm text-danger">{error}</p>}
+        {error && <p className='text-sm text-danger'>{error}</p>}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            {t("common.cancel")}
+        <div className='flex justify-end gap-2 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose}>
+            {t('common.cancel')}
           </Button>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? t("common.saving") : t("common.save")}
+          <Button type='submit' disabled={isPending}>
+            {isPending ? t('common.saving') : t('common.save')}
           </Button>
         </div>
       </form>

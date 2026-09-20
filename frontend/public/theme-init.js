@@ -11,14 +11,13 @@
 // every edit to these lines. Loaded as a plain synchronous <script src> in
 // <head>, which still blocks the first paint, so the no-flash behaviour is
 // unchanged.
-(function () {
-  var stored = localStorage.getItem("aurum:theme");
-  if (stored === "light" || stored === "dark") {
-    document.documentElement.setAttribute("data-theme", stored);
+(() => {
+  var stored = localStorage.getItem('aurum:theme');
+  if (stored === 'light' || stored === 'dark') {
+    document.documentElement.setAttribute('data-theme', stored);
   }
-  var isDark =
-    stored === "dark" || (stored !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var isDark = stored === 'dark' || (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   var meta = document.querySelector('meta[name="theme-color"]');
   // Kept in sync by hand with index.css's --surface-0 light/dark values.
-  if (meta) meta.setAttribute("content", isDark ? "#0d0d0d" : "#f9f9f7");
+  if (meta) meta.setAttribute('content', isDark ? '#0d0d0d' : '#f9f9f7');
 })();

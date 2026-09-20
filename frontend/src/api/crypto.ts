@@ -1,4 +1,4 @@
-import { api } from "@/api/client";
+import { api } from '@/api/client';
 import type {
   CryptoHistoryResponse,
   CryptoHolding,
@@ -13,14 +13,14 @@ import type {
   CryptoTransaction,
   CryptoTransactionInput,
   RiskLevel,
-} from "@/types";
+} from '@/types';
 
 export function fetchCryptoPortfolios(includeArchived = false) {
   return api.get<CryptoPortfolio[]>(`/crypto/portfolios?include_archived=${includeArchived}`);
 }
 
 export function createCryptoPortfolio(input: CryptoPortfolioInput) {
-  return api.post<CryptoPortfolio>("/crypto/portfolios", input);
+  return api.post<CryptoPortfolio>('/crypto/portfolios', input);
 }
 
 export function updateCryptoPortfolio(portfolioId: number, input: Partial<CryptoPortfolioInput>) {
@@ -36,17 +36,17 @@ export function deleteCryptoPortfolio(portfolioId: number) {
 // `holdings` — the sync itself (and the 24h window) always covers every
 // portfolio, see refresh_prices' own docstring.
 export function fetchCryptoHoldings(portfolioId?: number | null) {
-  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : "";
+  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : '';
   return api.get<CryptoSyncResult>(`/crypto/holdings${query}`);
 }
 
 export function refreshCryptoPrices(portfolioId?: number | null) {
-  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : "";
+  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : '';
   return api.post<CryptoSyncResult>(`/crypto/refresh${query}`, {});
 }
 
 export function createCryptoHolding(input: CryptoHoldingCreateInput) {
-  return api.post<CryptoHolding>("/crypto/holdings", input);
+  return api.post<CryptoHolding>('/crypto/holdings', input);
 }
 
 // Holding-only metadata (currently just `network`) — quantity/price/date
@@ -91,11 +91,11 @@ export function searchCryptoCoins(query: string) {
 }
 
 export function fetchCryptoHistory(range: CryptoRange, portfolioId?: number | null) {
-  const query = portfolioId != null ? `&portfolio_id=${portfolioId}` : "";
+  const query = portfolioId != null ? `&portfolio_id=${portfolioId}` : '';
   return api.get<CryptoHistoryResponse>(`/crypto/history?range=${range}${query}`);
 }
 
 export function fetchCrypto90dPerformance(portfolioId?: number | null) {
-  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : "";
+  const query = portfolioId != null ? `?portfolio_id=${portfolioId}` : '';
   return api.get<CryptoPerformanceResponse>(`/crypto/performance/90d${query}`);
 }

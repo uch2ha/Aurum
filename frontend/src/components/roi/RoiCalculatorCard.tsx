@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Input, Label } from "@/components/ui/Input";
-import { useTranslation } from "@/lib/i18n";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Input, Label } from '@/components/ui/Input';
+import { useTranslation } from '@/lib/i18n';
 
 interface RoiCalculatorCardProps {
   investment: string;
@@ -32,29 +32,29 @@ export function RoiCalculatorCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("roi.calculator.title")}</CardTitle>
+        <CardTitle>{t('roi.calculator.title')}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+      <CardContent className='space-y-3'>
+        <div className='grid grid-cols-2 gap-3'>
           <div>
-            <Label htmlFor="roi-investment">{t("roi.calculator.investmentLabel")}</Label>
+            <Label htmlFor='roi-investment'>{t('roi.calculator.investmentLabel')}</Label>
             <Input
-              id="roi-investment"
-              type="number"
-              step="0.01"
-              min="0"
-              placeholder="100000"
+              id='roi-investment'
+              type='number'
+              step='0.01'
+              min='0'
+              placeholder='100000'
               value={investment}
               onChange={(event) => onInvestmentChange(event.target.value)}
             />
           </div>
           <div>
-            <Label htmlFor="roi-income">{t("roi.calculator.monthlyIncomeLabel")}</Label>
+            <Label htmlFor='roi-income'>{t('roi.calculator.monthlyIncomeLabel')}</Label>
             <Input
-              id="roi-income"
-              type="number"
-              step="0.01"
-              placeholder="830"
+              id='roi-income'
+              type='number'
+              step='0.01'
+              placeholder='830'
               value={monthlyIncome}
               onChange={(event) => onMonthlyIncomeChange(event.target.value)}
             />
@@ -62,22 +62,22 @@ export function RoiCalculatorCard({
         </div>
 
         {annualRoiPercent === null ? (
-          <p className="text-xs text-text-muted">{t("roi.calculator.hint")}</p>
+          <p className='text-xs text-text-muted'>{t('roi.calculator.hint')}</p>
         ) : (
-          <div className="rounded-lg bg-surface-2 p-3.5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
-              {t("roi.calculator.annualRoiLabel")}
+          <div className='rounded-lg bg-surface-2 p-3.5'>
+            <p className='text-xs font-semibold uppercase tracking-wide text-text-muted'>
+              {t('roi.calculator.annualRoiLabel')}
             </p>
             <p
-              className="mt-1 text-2xl font-semibold tabular-nums"
-              style={{ color: annualRoiPercent >= 0 ? "var(--success)" : "var(--danger)" }}
+              className='mt-1 text-2xl font-semibold tabular-nums'
+              style={{ color: annualRoiPercent >= 0 ? 'var(--success)' : 'var(--danger)' }}
             >
               {annualRoiPercent.toFixed(1)}%
             </p>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className='mt-1 text-xs text-text-muted'>
               {paybackYears !== null
-                ? t("roi.calculator.payback", { years: paybackYears.toFixed(1) })
-                : t("roi.calculator.noPayback")}
+                ? t('roi.calculator.payback', { years: paybackYears.toFixed(1) })
+                : t('roi.calculator.noPayback')}
             </p>
           </div>
         )}

@@ -1,9 +1,9 @@
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { formatCurrency, getIntlLocale, pluralizeRu } from "@/lib/format";
-import { useTranslation, type Language } from "@/lib/i18n";
-import { translateCategoryName } from "@/lib/categoryLabels";
-import type { CategorySpendingReport } from "@/types";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { formatCurrency, getIntlLocale, pluralizeRu } from '@/lib/format';
+import { useTranslation, type Language } from '@/lib/i18n';
+import { translateCategoryName } from '@/lib/categoryLabels';
+import type { CategorySpendingReport } from '@/types';
 
 interface CategorySpendingChartProps {
   report: CategorySpendingReport | undefined;
@@ -11,18 +11,18 @@ interface CategorySpendingChartProps {
 }
 
 function monthKey(year: number, month: number): string {
-  return `${year}-${String(month).padStart(2, "0")}-01`;
+  return `${year}-${String(month).padStart(2, '0')}-01`;
 }
 
 function formatMonthLabel(key: string): string {
-  return new Intl.DateTimeFormat(getIntlLocale(), { month: "short", year: "numeric" }).format(
-    new Date(`${key}T00:00:00`)
+  return new Intl.DateTimeFormat(getIntlLocale(), { month: 'short', year: 'numeric' }).format(
+    new Date(`${key}T00:00:00`),
   );
 }
 
 function transactionsCountLabel(count: number, language: Language): string {
-  if (language === "ru") return pluralizeRu(count, "транзакция", "транзакции", "транзакций");
-  return count === 1 ? "transaction" : "transactions";
+  if (language === 'ru') return pluralizeRu(count, 'транзакция', 'транзакции', 'транзакций');
+  return count === 1 ? 'transaction' : 'transactions';
 }
 
 /** Same landmark idea as the Net Worth chart: year ticks only when the bars
@@ -40,70 +40,77 @@ function computeYearTicks(keys: string[]): string[] {
   return ticks;
 }
 
-function ChartTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { key: string; amount: number } }> }) {
+function ChartTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{ payload: { key: string; amount: number } }>;
+}) {
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
-    <div className="rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md">
-      <p className="text-text-muted">{formatMonthLabel(point.key)}</p>
-      <p className="font-medium text-text-primary">{formatCurrency(point.amount)}</p>
+    <div className='rounded-lg border border-border bg-surface-1 px-3 py-2 text-sm shadow-md'>
+      <p className='text-text-muted'>{formatMonthLabel(point.key)}</p>
+      <p className='font-medium text-text-primary'>{formatCurrency(point.amount)}</p>
     </div>
   );
 }
 
 export function CategorySpendingChart({ report, isLoading }: CategorySpendingChartProps) {
   const { t, language } = useTranslation();
-  const chartData = report?.series.map((point) => ({
-    key: monthKey(point.year, point.month),
-    amount: Number(point.amount),
-  })) ?? [];
+  const chartData =
+    report?.series.map((point) => ({
+      key: monthKey(point.year, point.month),
+      amount: Number(point.amount),
+    })) ?? [];
   const yearTicks = computeYearTicks(chartData.map((point) => point.key));
 
   return (
     <Card>
-      <CardHeader className="items-start">
+      <CardHeader className='items-start'>
         <div>
-          <CardTitle>{report ? translateCategoryName(report.category_name) : t("reports.defaultChartTitle")}</CardTitle>
-          <p className="mt-1.5 text-2xl font-semibold tabular-nums text-text-primary sm:text-[28px]">
-            {isLoading || !report ? "…" : formatCurrency(report.total_amount)}
+          <CardTitle>{report ? translateCategoryName(report.category_name) : t('reports.defaultChartTitle')}</CardTitle>
+          <p className='mt-1.5 text-2xl font-semibold tabular-nums text-text-primary sm:text-[28px]'>
+            {isLoading || !report ? '…' : formatCurrency(report.total_amount)}
           </p>
           {report && (
-            <p className="mt-1 text-sm text-text-muted">
-              {t("reports.averagePerMonth", { amount: formatCurrency(report.average_per_month) })} ·{" "}
+            <p className='mt-1 text-sm text-text-muted'>
+              {t('reports.averagePerMonth', { amount: formatCurrency(report.average_per_month) })} ·{' '}
               {report.transaction_count} {transactionsCountLabel(report.transaction_count, language)}
             </p>
           )}
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-56 w-full sm:h-64">
+        <div className='h-56 w-full sm:h-64'>
           {isLoading || !report || chartData.length === 0 ? (
-            <div className="flex h-full items-center justify-center text-sm text-text-muted">
-              {isLoading ? t("common.loading") : t("reports.noDataForPeriod")}
+            <div className='flex h-full items-center justify-center text-sm text-text-muted'>
+              {isLoading ? t('common.loading') : t('reports.noDataForPeriod')}
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width='100%' height='100%'>
               <BarChart data={chartData} margin={{ top: 8, right: 4, bottom: 0, left: 4 }}>
                 {yearTicks.length > 0 && (
                   <XAxis
-                    dataKey="key"
-                    type="category"
+                    dataKey='key'
+                    type='category'
                     ticks={yearTicks}
                     tickFormatter={(value: string) => value.slice(0, 4)}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "var(--text-muted)", fontSize: 11 }}
-                    interval="preserveStartEnd"
+                    tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                    interval='preserveStartEnd'
                   />
                 )}
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: "var(--surface-2)" }} />
-                <Bar dataKey="amount" fill={report.category_color} radius={[2, 2, 0, 0]} isAnimationActive={false} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: 'var(--surface-2)' }} />
+                <Bar dataKey='amount' fill={report.category_color} radius={[2, 2, 0, 0]} isAnimationActive={false} />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
         {chartData.length > 1 && (
-          <div className="mt-2 flex justify-between text-xs text-text-muted">
+          <div className='mt-2 flex justify-between text-xs text-text-muted'>
             <span>{formatMonthLabel(chartData[0].key)}</span>
             <span>{formatMonthLabel(chartData[chartData.length - 1].key)}</span>
           </div>

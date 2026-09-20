@@ -1,7 +1,7 @@
-import { api } from "@/api/client";
-import type { Transaction, TransactionInput, TransactionPage } from "@/types";
+import { api } from '@/api/client';
+import type { Transaction, TransactionInput, TransactionPage } from '@/types';
 
-export type TransactionSort = "date_desc" | "amount_desc" | "amount_asc";
+export type TransactionSort = 'date_desc' | 'amount_desc' | 'amount_asc';
 
 export interface TransactionFilters {
   year?: number;
@@ -49,17 +49,17 @@ export async function fetchAllTransactionsInRange(filters: TransactionFilters): 
  * transaction through the current year (see backend for the "gap year"
  * rationale). */
 export function fetchTransactionYears() {
-  return api.get<number[]>("/transactions/years");
+  return api.get<number[]>('/transactions/years');
 }
 
 export function createTransaction(input: TransactionInput) {
-  return api.post<Transaction>("/transactions", input);
+  return api.post<Transaction>('/transactions', input);
 }
 
 /** CSV import — see pages/CsvImportPage.tsx. All-or-nothing on the backend:
  * either every row is created, or (on a validation error) none are. */
 export function bulkCreateTransactions(items: TransactionInput[]) {
-  return api.post<{ created: number }>("/transactions/bulk", { items });
+  return api.post<{ created: number }>('/transactions/bulk', { items });
 }
 
 export function updateTransaction(id: number, input: Partial<TransactionInput>) {

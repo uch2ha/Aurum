@@ -1,14 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addGoalContribution, createGoal, deleteGoal, fetchGoals, updateGoal } from "@/api/goals";
-import type { GoalContributionInput, GoalInput } from "@/types";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { addGoalContribution, createGoal, deleteGoal, fetchGoals, updateGoal } from '@/api/goals';
+import type { GoalContributionInput, GoalInput } from '@/types';
 
 function useInvalidateGoals() {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: ["goals"] });
+  return () => queryClient.invalidateQueries({ queryKey: ['goals'] });
 }
 
 export function useGoals() {
-  return useQuery({ queryKey: ["goals"], queryFn: fetchGoals });
+  return useQuery({ queryKey: ['goals'], queryFn: fetchGoals });
 }
 
 export function useCreateGoal() {

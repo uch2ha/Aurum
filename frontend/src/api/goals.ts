@@ -1,12 +1,12 @@
-import { api } from "@/api/client";
-import type { Goal, GoalContributionInput, GoalInput } from "@/types";
+import { api } from '@/api/client';
+import type { Goal, GoalContributionInput, GoalInput } from '@/types';
 
 export function fetchGoals() {
-  return api.get<Goal[]>("/goals");
+  return api.get<Goal[]>('/goals');
 }
 
 export function createGoal(input: GoalInput) {
-  return api.post<Goal>("/goals", input);
+  return api.post<Goal>('/goals', input);
 }
 
 export function updateGoal(id: number, input: Partial<GoalInput>) {

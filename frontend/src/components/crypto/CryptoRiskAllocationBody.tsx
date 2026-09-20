@@ -1,6 +1,6 @@
-import { formatCurrency, maskAmount } from "@/lib/format";
-import { useTranslation, type TranslationKey } from "@/lib/i18n";
-import type { CryptoHolding, RiskLevel } from "@/types";
+import { formatCurrency, maskAmount } from '@/lib/format';
+import { useTranslation, type TranslationKey } from '@/lib/i18n';
+import type { CryptoHolding, RiskLevel } from '@/types';
 
 interface CryptoRiskAllocationBodyProps {
   holdings: CryptoHolding[];
@@ -13,11 +13,11 @@ interface CryptoRiskAllocationBodyProps {
 // both places on the Crypto tab. --series-4 is the dataviz skill's
 // validated yellow/orange slot.
 const TIER_COLOR: Record<RiskLevel, string> = {
-  low: "var(--success)",
-  medium: "var(--series-4)",
-  high: "var(--danger)",
+  low: 'var(--success)',
+  medium: 'var(--series-4)',
+  high: 'var(--danger)',
 };
-const RISK_LEVELS: RiskLevel[] = ["low", "medium", "high"];
+const RISK_LEVELS: RiskLevel[] = ['low', 'medium', 'high'];
 
 export interface RiskTierItem {
   symbol: string;
@@ -72,41 +72,41 @@ export function CryptoRiskAllocationBody({ holdings, isLoading, hidden }: Crypto
   const { t } = useTranslation();
 
   if (isLoading) {
-    return <p className="py-10 text-center text-sm text-text-muted">{t("common.loading")}</p>;
+    return <p className='py-10 text-center text-sm text-text-muted'>{t('common.loading')}</p>;
   }
   if (holdings.length === 0) {
-    return <p className="py-10 text-center text-sm text-text-muted">{t("crypto.empty")}</p>;
+    return <p className='py-10 text-center text-sm text-text-muted'>{t('crypto.empty')}</p>;
   }
 
   const tiers = computeRiskTiers(holdings);
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <div className='grid grid-cols-1 gap-3 sm:grid-cols-3'>
       {tiers.map((tier) => (
-        <div key={tier.level} className="rounded-lg border border-border p-3.5">
-          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: TIER_COLOR[tier.level] }} />
+        <div key={tier.level} className='rounded-lg border border-border p-3.5'>
+          <p className='flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted'>
+            <span className='h-2 w-2 shrink-0 rounded-full' style={{ backgroundColor: TIER_COLOR[tier.level] }} />
             {t(`netWorth.riskLevel.${tier.level}` as TranslationKey)}
           </p>
-          <p className="mt-1.5 text-xl font-semibold tabular-nums text-text-primary">
+          <p className='mt-1.5 text-xl font-semibold tabular-nums text-text-primary'>
             {maskAmount(formatCurrency(tier.value), hidden)}
           </p>
-          <p className="mt-1 text-xs text-text-muted">
-            {tier.percent.toFixed(1)}% {t("crypto.riskAllocationOfPortfolio")}
+          <p className='mt-1 text-xs text-text-muted'>
+            {tier.percent.toFixed(1)}% {t('crypto.riskAllocationOfPortfolio')}
           </p>
 
           {tier.items.length > 0 && (
-            <ul className="mt-3 space-y-1.5 border-t border-gridline pt-3">
+            <ul className='mt-3 space-y-1.5 border-t border-gridline pt-3'>
               {tier.items.map((item) => (
-                <li key={item.symbol} className="flex items-center gap-2">
-                  <span className="min-w-0 flex-1 truncate text-xs text-text-secondary">{item.symbol}</span>
-                  <span className="h-1 w-10 shrink-0 overflow-hidden rounded-full bg-surface-2">
+                <li key={item.symbol} className='flex items-center gap-2'>
+                  <span className='min-w-0 flex-1 truncate text-xs text-text-secondary'>{item.symbol}</span>
+                  <span className='h-1 w-10 shrink-0 overflow-hidden rounded-full bg-surface-2'>
                     <span
-                      className="block h-full rounded-full"
+                      className='block h-full rounded-full'
                       style={{ width: `${item.percent}%`, backgroundColor: TIER_COLOR[tier.level] }}
                     />
                   </span>
-                  <span className="w-8 shrink-0 text-right text-[11px] tabular-nums text-text-muted">
+                  <span className='w-8 shrink-0 text-right text-[11px] tabular-nums text-text-muted'>
                     {item.percent.toFixed(1)}%
                   </span>
                 </li>

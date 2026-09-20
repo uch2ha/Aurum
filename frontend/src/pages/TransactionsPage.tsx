@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { FileUp, Plus, Search, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { Input, Select } from "@/components/ui/Input";
-import { MonthSelector } from "@/components/layout/MonthSelector";
-import { YearSelector } from "@/components/layout/YearSelector";
-import { TransactionsTable } from "@/components/transactions/TransactionsTable";
-import { TransactionFormModal } from "@/components/transactions/TransactionFormModal";
-import { useTransactions, useDeleteTransaction, useTransactionYears } from "@/hooks/useTransactions";
-import { useCategories } from "@/hooks/useCategories";
-import { useTags } from "@/hooks/useTags";
-import type { TransactionSort } from "@/api/transactions";
-import { useTranslation } from "@/lib/i18n";
-import { buildHierarchicalCategories, translateCategoryName } from "@/lib/categoryLabels";
-import type { Transaction, TransactionType } from "@/types";
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { FileUp, Plus, Search, X } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input, Select } from '@/components/ui/Input';
+import { MonthSelector } from '@/components/layout/MonthSelector';
+import { YearSelector } from '@/components/layout/YearSelector';
+import { TransactionsTable } from '@/components/transactions/TransactionsTable';
+import { TransactionFormModal } from '@/components/transactions/TransactionFormModal';
+import { useTransactions, useDeleteTransaction, useTransactionYears } from '@/hooks/useTransactions';
+import { useCategories } from '@/hooks/useCategories';
+import { useTags } from '@/hooks/useTags';
+import type { TransactionSort } from '@/api/transactions';
+import { useTranslation } from '@/lib/i18n';
+import { buildHierarchicalCategories, translateCategoryName } from '@/lib/categoryLabels';
+import type { Transaction, TransactionType } from '@/types';
 
 const PAGE_SIZE = 20;
 
@@ -41,18 +41,18 @@ export function TransactionsPage() {
   // the month/year the user was already looking at (?year=&month=) so this
   // page doesn't reset back to the current month.
   const [searchParams] = useSearchParams();
-  const [year, setYear] = useState(() => parseYearParam(searchParams.get("year"), now.getFullYear()));
-  const [month, setMonth] = useState(() => parseMonthParam(searchParams.get("month"), now.getMonth() + 1));
-  const [type, setType] = useState<TransactionType | "">("");
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [tagId, setTagId] = useState<string>("");
-  const [sort, setSort] = useState<TransactionSort>("date_desc");
+  const [year, setYear] = useState(() => parseYearParam(searchParams.get('year'), now.getFullYear()));
+  const [month, setMonth] = useState(() => parseMonthParam(searchParams.get('month'), now.getMonth() + 1));
+  const [type, setType] = useState<TransactionType | ''>('');
+  const [categoryId, setCategoryId] = useState<string>('');
+  const [tagId, setTagId] = useState<string>('');
+  const [sort, setSort] = useState<TransactionSort>('date_desc');
   const [page, setPage] = useState(1);
 
   // Raw text follows every keystroke; the debounced value is what actually
   // drives the query, so we're not refetching on every character typed.
-  const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
   useEffect(() => {
     const timeout = setTimeout(() => {
       setSearch(searchInput.trim());
@@ -88,12 +88,12 @@ export function TransactionsPage() {
   // under its own parent, indented) — a bare "Sweets" option next to
   // top-level categories reads as if it were one itself.
   const expenseCategoryOptions = buildHierarchicalCategories(
-    (categories ?? []).filter((category) => category.kind === "expense"),
-    language
+    (categories ?? []).filter((category) => category.kind === 'expense'),
+    language,
   );
   const incomeCategoryOptions = buildHierarchicalCategories(
-    (categories ?? []).filter((category) => category.kind === "income"),
-    language
+    (categories ?? []).filter((category) => category.kind === 'income'),
+    language,
   );
 
   function openCreateModal() {
@@ -107,7 +107,7 @@ export function TransactionsPage() {
   }
 
   function handleDelete(transaction: Transaction) {
-    if (window.confirm(t("transactions.confirmDelete", { description: transaction.description }))) {
+    if (window.confirm(t('transactions.confirmDelete', { description: transaction.description }))) {
       deleteTransaction.mutate(transaction.id);
     }
   }
@@ -119,16 +119,16 @@ export function TransactionsPage() {
     const date = new Date(`${transaction.date}T00:00:00`);
     setYear(date.getFullYear());
     setMonth(date.getMonth() + 1);
-    setSearchInput("");
-    setSearch("");
+    setSearchInput('');
+    setSearch('');
     setPage(1);
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 flex-1 items-center gap-3">
-          <div className={`min-w-0 flex-1 ${isSearching ? "pointer-events-none opacity-50" : ""}`}>
+    <div className='space-y-5'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+        <div className='flex min-w-0 flex-1 items-center gap-3'>
+          <div className={`min-w-0 flex-1 ${isSearching ? 'pointer-events-none opacity-50' : ''}`}>
             <MonthSelector
               month={month}
               onChange={(value) => {
@@ -137,7 +137,7 @@ export function TransactionsPage() {
               }}
             />
           </div>
-          <div className={isSearching ? "pointer-events-none opacity-50" : ""}>
+          <div className={isSearching ? 'pointer-events-none opacity-50' : ''}>
             <YearSelector
               years={years ?? [now.getFullYear()]}
               year={year}
@@ -148,58 +148,58 @@ export function TransactionsPage() {
             />
           </div>
         </div>
-        <div className="flex gap-2">
-          <Link to="/transactions/import" className="flex-1 sm:flex-none">
-            <Button variant="secondary" className="w-full sm:w-auto">
+        <div className='flex gap-2'>
+          <Link to='/transactions/import' className='flex-1 sm:flex-none'>
+            <Button variant='secondary' className='w-full sm:w-auto'>
               <FileUp size={16} />
-              {t("transactions.importButton")}
+              {t('transactions.importButton')}
             </Button>
           </Link>
-          <Button onClick={openCreateModal} className="flex-1 sm:w-auto">
+          <Button onClick={openCreateModal} className='flex-1 sm:w-auto'>
             <Plus size={16} />
-            {t("transactions.addButton")}
+            {t('transactions.addButton')}
           </Button>
         </div>
       </div>
 
-      <div className="relative">
-        <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+      <div className='relative'>
+        <Search size={16} className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-muted' />
         <Input
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
-          placeholder={t("transactions.searchPlaceholder")}
-          className="pl-9 pr-9"
+          placeholder={t('transactions.searchPlaceholder')}
+          className='pl-9 pr-9'
         />
         {searchInput && (
           <button
-            type="button"
-            aria-label={t("common.clear")}
+            type='button'
+            aria-label={t('common.clear')}
             onClick={() => {
-              setSearchInput("");
-              setSearch("");
+              setSearchInput('');
+              setSearch('');
               setPage(1);
             }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-text-muted hover:bg-surface-2 hover:text-text-primary"
+            className='absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-text-muted hover:bg-surface-2 hover:text-text-primary'
           >
             <X size={15} />
           </button>
         )}
       </div>
-      {isSearching && <p className="text-xs text-text-muted">{t("transactions.searchAcrossAllTime")}</p>}
+      {isSearching && <p className='text-xs text-text-muted'>{t('transactions.searchAcrossAllTime')}</p>}
 
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className='flex flex-col gap-3 sm:flex-row'>
         <Select
           value={type}
           onChange={(event) => {
-            setType(event.target.value as TransactionType | "");
+            setType(event.target.value as TransactionType | '');
             setPage(1);
           }}
-          className="sm:w-48"
+          className='sm:w-48'
         >
-          <option value="">{t("transactions.allTypes")}</option>
-          <option value="expense">{t("transactions.expense")}</option>
-          <option value="income">{t("transactions.income")}</option>
-          <option value="transfer">{t("transactions.transfer")}</option>
+          <option value=''>{t('transactions.allTypes')}</option>
+          <option value='expense'>{t('transactions.expense')}</option>
+          <option value='income'>{t('transactions.income')}</option>
+          <option value='transfer'>{t('transactions.transfer')}</option>
         </Select>
         <Select
           value={categoryId}
@@ -207,24 +207,24 @@ export function TransactionsPage() {
             setCategoryId(event.target.value);
             setPage(1);
           }}
-          className="sm:w-56"
+          className='sm:w-56'
         >
-          <option value="">{t("transactions.allCategories")}</option>
+          <option value=''>{t('transactions.allCategories')}</option>
           {expenseCategoryOptions.length > 0 && (
-            <optgroup label={t("reports.expenseGroup")}>
+            <optgroup label={t('reports.expenseGroup')}>
               {expenseCategoryOptions.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.indented ? `    ↳ ` : ""}
+                  {category.indented ? `    ↳ ` : ''}
                   {translateCategoryName(category.name)}
                 </option>
               ))}
             </optgroup>
           )}
           {incomeCategoryOptions.length > 0 && (
-            <optgroup label={t("reports.incomeGroup")}>
+            <optgroup label={t('reports.incomeGroup')}>
               {incomeCategoryOptions.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.indented ? `    ↳ ` : ""}
+                  {category.indented ? `    ↳ ` : ''}
                   {translateCategoryName(category.name)}
                 </option>
               ))}
@@ -238,9 +238,9 @@ export function TransactionsPage() {
               setTagId(event.target.value);
               setPage(1);
             }}
-            className="sm:w-48"
+            className='sm:w-48'
           >
-            <option value="">{t("transactions.allTags")}</option>
+            <option value=''>{t('transactions.allTags')}</option>
             {tags.map((tag) => (
               <option key={tag.id} value={tag.id}>
                 {tag.name}
@@ -254,23 +254,23 @@ export function TransactionsPage() {
             setSort(event.target.value as TransactionSort);
             setPage(1);
           }}
-          className="sm:w-56"
+          className='sm:w-56'
         >
-          <option value="date_desc">{t("transactions.sortDateDesc")}</option>
-          <option value="amount_desc">{t("transactions.sortAmountDesc")}</option>
-          <option value="amount_asc">{t("transactions.sortAmountAsc")}</option>
+          <option value='date_desc'>{t('transactions.sortDateDesc')}</option>
+          <option value='amount_desc'>{t('transactions.sortAmountDesc')}</option>
+          <option value='amount_asc'>{t('transactions.sortAmountAsc')}</option>
         </Select>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("nav.transactions")}</CardTitle>
-          {data && <span className="text-xs text-text-muted">{t("common.totalCount", { count: data.total })}</span>}
+          <CardTitle>{t('nav.transactions')}</CardTitle>
+          {data && <span className='text-xs text-text-muted'>{t('common.totalCount', { count: data.total })}</span>}
         </CardHeader>
         <CardContent>
-          {isError && <p className="py-6 text-center text-sm text-danger">{t("transactions.failedToLoad")}</p>}
+          {isError && <p className='py-6 text-center text-sm text-danger'>{t('transactions.failedToLoad')}</p>}
           {isLoading ? (
-            <p className="py-12 text-center text-sm text-text-muted">{t("common.loading")}</p>
+            <p className='py-12 text-center text-sm text-text-muted'>{t('common.loading')}</p>
           ) : (
             <TransactionsTable
               items={data?.items ?? []}
@@ -281,13 +281,13 @@ export function TransactionsPage() {
           )}
 
           {totalPages > 1 && (
-            <div className="mt-4 flex items-center justify-center gap-3 text-sm">
-              <Button variant="secondary" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-                {t("common.back")}
+            <div className='mt-4 flex items-center justify-center gap-3 text-sm'>
+              <Button variant='secondary' disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+                {t('common.back')}
               </Button>
-              <span className="text-text-muted">{t("common.pageOf", { page, total: totalPages })}</span>
-              <Button variant="secondary" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-                {t("common.next")}
+              <span className='text-text-muted'>{t('common.pageOf', { page, total: totalPages })}</span>
+              <Button variant='secondary' disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                {t('common.next')}
               </Button>
             </div>
           )}

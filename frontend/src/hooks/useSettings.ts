@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchSettings, updateSettings } from "@/api/settings";
-import { setCurrency } from "@/lib/i18n";
-import type { AppSettings } from "@/types";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchSettings, updateSettings } from '@/api/settings';
+import { setCurrency } from '@/lib/i18n';
+import type { AppSettings } from '@/types';
 
 export function useAppSettings() {
-  return useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
+  return useQuery({ queryKey: ['settings'], queryFn: fetchSettings });
 }
 
 export function useUpdateAppSettings() {
@@ -12,7 +12,7 @@ export function useUpdateAppSettings() {
   return useMutation({
     mutationFn: (input: Partial<AppSettings>) => updateSettings(input),
     onSuccess: (data) => {
-      queryClient.setQueryData(["settings"], data);
+      queryClient.setQueryData(['settings'], data);
       setCurrency(data.currency);
     },
   });

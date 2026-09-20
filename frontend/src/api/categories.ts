@@ -1,12 +1,12 @@
-import { api } from "@/api/client";
-import type { Category, CategoryInput, CategoryUpdateInput } from "@/types";
+import { api } from '@/api/client';
+import type { Category, CategoryInput, CategoryUpdateInput } from '@/types';
 
 export function fetchCategories() {
-  return api.get<Category[]>("/categories");
+  return api.get<Category[]>('/categories');
 }
 
 export function createCategory(input: CategoryInput) {
-  return api.post<Category>("/categories", input);
+  return api.post<Category>('/categories', input);
 }
 
 export function updateCategory(id: number, input: CategoryUpdateInput) {

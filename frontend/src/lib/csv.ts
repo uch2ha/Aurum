@@ -6,11 +6,11 @@ export function parseCsv(text: string): string[][] {
   const firstLine = text.slice(0, text.search(/\r?\n/) === -1 ? text.length : text.search(/\r?\n/));
   const commaCount = (firstLine.match(/,/g) ?? []).length;
   const semicolonCount = (firstLine.match(/;/g) ?? []).length;
-  const delimiter = semicolonCount > commaCount ? ";" : ",";
+  const delimiter = semicolonCount > commaCount ? ';' : ',';
 
   const rows: string[][] = [];
   let row: string[] = [];
-  let field = "";
+  let field = '';
   let inQuotes = false;
 
   for (let i = 0; i < text.length; i++) {
@@ -34,14 +34,14 @@ export function parseCsv(text: string): string[][] {
       inQuotes = true;
     } else if (char === delimiter) {
       row.push(field);
-      field = "";
-    } else if (char === "\r") {
+      field = '';
+    } else if (char === '\r') {
       // skip — \n (below) closes the row
-    } else if (char === "\n") {
+    } else if (char === '\n') {
       row.push(field);
       rows.push(row);
       row = [];
-      field = "";
+      field = '';
     } else {
       field += char;
     }
@@ -51,10 +51,10 @@ export function parseCsv(text: string): string[][] {
     rows.push(row);
   }
 
-  return rows.filter((cells) => !(cells.length === 1 && cells[0].trim() === ""));
+  return rows.filter((cells) => !(cells.length === 1 && cells[0].trim() === ''));
 }
 
-export const DATE_FORMATS = ["YYYY-MM-DD", "DD.MM.YYYY", "DD/MM/YYYY", "MM/DD/YYYY", "DD-MM-YYYY"] as const;
+export const DATE_FORMATS = ['YYYY-MM-DD', 'DD.MM.YYYY', 'DD/MM/YYYY', 'MM/DD/YYYY', 'DD-MM-YYYY'] as const;
 export type DateFormat = (typeof DATE_FORMATS)[number];
 
 // Every pattern tolerates an optional trailing time of day ("24.10.2018
@@ -62,13 +62,14 @@ export type DateFormat = (typeof DATE_FORMATS)[number];
 // operation (T-Bank, monobank), and the wizard only stores the calendar
 // date anyway.
 const TIME_SUFFIX = /(?:[ T]\d{1,2}:\d{2}(?::\d{2})?)?$/.source;
-const DATE_PATTERNS: Record<DateFormat, { regex: RegExp; order: ["y" | "m" | "d", "y" | "m" | "d", "y" | "m" | "d"] }> = {
-  "YYYY-MM-DD": { regex: new RegExp(/^(\d{4})-(\d{1,2})-(\d{1,2})/.source + TIME_SUFFIX), order: ["y", "m", "d"] },
-  "DD.MM.YYYY": { regex: new RegExp(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/.source + TIME_SUFFIX), order: ["d", "m", "y"] },
-  "DD/MM/YYYY": { regex: new RegExp(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.source + TIME_SUFFIX), order: ["d", "m", "y"] },
-  "MM/DD/YYYY": { regex: new RegExp(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.source + TIME_SUFFIX), order: ["m", "d", "y"] },
-  "DD-MM-YYYY": { regex: new RegExp(/^(\d{1,2})-(\d{1,2})-(\d{4})/.source + TIME_SUFFIX), order: ["d", "m", "y"] },
-};
+const DATE_PATTERNS: Record<DateFormat, { regex: RegExp; order: ['y' | 'm' | 'd', 'y' | 'm' | 'd', 'y' | 'm' | 'd'] }> =
+  {
+    'YYYY-MM-DD': { regex: new RegExp(/^(\d{4})-(\d{1,2})-(\d{1,2})/.source + TIME_SUFFIX), order: ['y', 'm', 'd'] },
+    'DD.MM.YYYY': { regex: new RegExp(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/.source + TIME_SUFFIX), order: ['d', 'm', 'y'] },
+    'DD/MM/YYYY': { regex: new RegExp(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.source + TIME_SUFFIX), order: ['d', 'm', 'y'] },
+    'MM/DD/YYYY': { regex: new RegExp(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/.source + TIME_SUFFIX), order: ['m', 'd', 'y'] },
+    'DD-MM-YYYY': { regex: new RegExp(/^(\d{1,2})-(\d{1,2})-(\d{4})/.source + TIME_SUFFIX), order: ['d', 'm', 'y'] },
+  };
 
 /** Parses `raw` per `format`, returning an ISO "YYYY-MM-DD" string, or null
  * if it doesn't match the pattern or isn't a real calendar date (e.g. Feb 30
@@ -78,7 +79,7 @@ export function parseDateWithFormat(raw: string, format: DateFormat): string | n
   const match = raw.trim().match(regex);
   if (!match) return null;
 
-  const parts: Record<"y" | "m" | "d", number> = { y: 0, m: 0, d: 0 };
+  const parts: Record<'y' | 'm' | 'd', number> = { y: 0, m: 0, d: 0 };
   order.forEach((key, index) => {
     parts[key] = Number(match[index + 1]);
   });
@@ -88,10 +89,10 @@ export function parseDateWithFormat(raw: string, format: DateFormat): string | n
   const date = new Date(year, month - 1, day);
   if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
 
-  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
-export const AMOUNT_FORMATS = ["auto", "dot-decimal", "comma-decimal"] as const;
+export const AMOUNT_FORMATS = ['auto', 'dot-decimal', 'comma-decimal'] as const;
 export type AmountFormat = (typeof AMOUNT_FORMATS)[number];
 
 /** Parses a bank-export amount string. `format` lets the user resolve what
@@ -106,25 +107,28 @@ export type AmountFormat = (typeof AMOUNT_FORMATS)[number];
  * "1,234,567" or "1.234.567") — a number can have at most one decimal
  * point, so 2+ occurrences of the same separator can only be thousands
  * grouping. */
-export function parseAmount(raw: string, format: AmountFormat = "auto"): number | null {
-  let value = raw.trim().replace(/[\s ]/g, "");
+export function parseAmount(raw: string, format: AmountFormat = 'auto'): number | null {
+  let value = raw.trim().replace(/[\s ]/g, '');
   if (!value) return null;
 
-  if (format === "dot-decimal") {
-    value = value.replace(/,/g, "");
-  } else if (format === "comma-decimal") {
-    value = value.replace(/\./g, "").replace(",", ".");
+  if (format === 'dot-decimal') {
+    value = value.replace(/,/g, '');
+  } else if (format === 'comma-decimal') {
+    value = value.replace(/\./g, '').replace(',', '.');
   } else {
     const commaCount = (value.match(/,/g) ?? []).length;
     const dotCount = (value.match(/\./g) ?? []).length;
     if (commaCount > 0 && dotCount > 0) {
-      value = value.lastIndexOf(",") > value.lastIndexOf(".") ? value.replace(/\./g, "").replace(",", ".") : value.replace(/,/g, "");
+      value =
+        value.lastIndexOf(',') > value.lastIndexOf('.')
+          ? value.replace(/\./g, '').replace(',', '.')
+          : value.replace(/,/g, '');
     } else if (commaCount > 1) {
-      value = value.replace(/,/g, "");
+      value = value.replace(/,/g, '');
     } else if (commaCount === 1) {
-      value = value.replace(",", ".");
+      value = value.replace(',', '.');
     } else if (dotCount > 1) {
-      value = value.replace(/\./g, "");
+      value = value.replace(/\./g, '');
     }
   }
 
@@ -138,6 +142,6 @@ export function parseAmount(raw: string, format: AmountFormat = "auto"): number 
  * actually stores, so it works whether the "existing" side comes from a
  * Transaction or the "candidate" side from a freshly parsed CSV row. */
 export function transactionDedupeKey(date: string, type: string, amount: number | string, description: string): string {
-  const normalizedAmount = typeof amount === "number" ? amount : Number(amount);
+  const normalizedAmount = typeof amount === 'number' ? amount : Number(amount);
   return `${date}|${type}|${normalizedAmount.toFixed(2)}|${description.trim().toLowerCase()}`;
 }

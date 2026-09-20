@@ -23,11 +23,11 @@
  * (AURUM_BIND_ADDRESS makes LAN access over http:// possible), so callers must
  * check isVaultAvailable() and fall back to session-only storage.
  */
-const DB_NAME = "aurum-auth";
+const DB_NAME = 'aurum-auth';
 const DB_VERSION = 1;
-const STORE = "vault";
-const KEY_ID = "wrapping-key";
-const BLOB_ID = "remembered-credential";
+const STORE = 'vault';
+const KEY_ID = 'wrapping-key';
+const BLOB_ID = 'remembered-credential';
 
 interface StoredBlob {
   iv: Uint8Array;
@@ -37,10 +37,10 @@ interface StoredBlob {
 
 export function isVaultAvailable(): boolean {
   return (
-    typeof indexedDB !== "undefined" &&
-    typeof crypto !== "undefined" &&
-    typeof crypto.subtle !== "undefined" &&
-    typeof crypto.subtle.generateKey === "function"
+    typeof indexedDB !== 'undefined' &&
+    typeof crypto !== 'undefined' &&
+    typeof crypto.subtle !== 'undefined' &&
+    typeof crypto.subtle.generateKey === 'function'
   );
 }
 
@@ -77,12 +77,12 @@ async function withStore<T>(mode: IDBTransactionMode, run: (store: IDBObjectStor
 /** Reuses the existing key when there is one: regenerating it on every login
  * would strand any ciphertext already written under the old key. */
 async function getOrCreateKey(): Promise<CryptoKey> {
-  const existing = await withStore("readonly", (store) => runRequest<CryptoKey | undefined>(store, store.get(KEY_ID)));
+  const existing = await withStore('readonly', (store) => runRequest<CryptoKey | undefined>(store, store.get(KEY_ID)));
   if (existing) return existing;
 
   // extractable: false is the whole point — see the module comment.
-  const key = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
-  await withStore("readwrite", (store) => runRequest(store, store.put(key, KEY_ID)));
+  const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  await withStore('readwrite', (store) => runRequest(store, store.put(key, KEY_ID)));
   return key;
 }
 
@@ -93,9 +93,9 @@ export async function rememberCredential(header: string, ttlMs: number): Promise
     // A fresh IV per encryption: reusing one with AES-GCM under the same key
     // is what breaks the mode outright.
     const iv = crypto.getRandomValues(new Uint8Array(12));
-    const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(header));
+    const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(header));
     const blob: StoredBlob = { iv, ciphertext, expiresAt: Date.now() + ttlMs };
-    await withStore("readwrite", (store) => runRequest(store, store.put(blob, BLOB_ID)));
+    await withStore('readwrite', (store) => runRequest(store, store.put(blob, BLOB_ID)));
   } catch {
     // Storage denied or unavailable (private window, quota, disabled) —
     // login still works for this session, it just won't be remembered.
@@ -105,7 +105,7 @@ export async function rememberCredential(header: string, ttlMs: number): Promise
 export async function recallCredential(): Promise<string | null> {
   if (!isVaultAvailable()) return null;
   try {
-    const blob = await withStore("readonly", (store) => runRequest<StoredBlob | undefined>(store, store.get(BLOB_ID)));
+    const blob = await withStore('readonly', (store) => runRequest<StoredBlob | undefined>(store, store.get(BLOB_ID)));
     if (!blob) return null;
     if (Date.now() >= blob.expiresAt) {
       await forgetCredential();
@@ -114,7 +114,7 @@ export async function recallCredential(): Promise<string | null> {
     // Copied into a fresh view: structured clone hands the IV back typed over
     // ArrayBufferLike, which doesn't satisfy WebCrypto's BufferSource.
     const iv = new Uint8Array(blob.iv);
-    const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, await getOrCreateKey(), blob.ciphertext);
+    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, await getOrCreateKey(), blob.ciphertext);
     return new TextDecoder().decode(plaintext);
   } catch {
     // Tampered ciphertext, a key that no longer matches, or storage trouble.
@@ -126,9 +126,9 @@ export async function recallCredential(): Promise<string | null> {
 }
 
 export async function forgetCredential(): Promise<void> {
-  if (typeof indexedDB === "undefined") return;
+  if (typeof indexedDB === 'undefined') return;
   try {
-    await withStore("readwrite", (store) => runRequest(store, store.delete(BLOB_ID)));
+    await withStore('readwrite', (store) => runRequest(store, store.delete(BLOB_ID)));
   } catch {
     // ignore — nothing usable to clean up
   }

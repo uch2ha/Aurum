@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { Plus, X } from "lucide-react";
-import { Dialog } from "@/components/ui/Dialog";
-import { Button } from "@/components/ui/Button";
-import { Input, Label, Select } from "@/components/ui/Input";
-import { TagInput } from "@/components/transactions/TagInput";
-import { useAccounts } from "@/hooks/useAccounts";
-import { useCategories } from "@/hooks/useCategories";
-import { useCreateTransaction, useUpdateTransaction } from "@/hooks/useTransactions";
-import { useTranslation } from "@/lib/i18n";
-import { buildHierarchicalCategories, translateCategoryName } from "@/lib/categoryLabels";
-import { formatCurrency } from "@/lib/format";
-import type { Tag, Transaction, TransactionInput, TransactionSplitInput, TransactionType } from "@/types";
+import { useEffect, useState } from 'react';
+import { Plus, X } from 'lucide-react';
+import { Dialog } from '@/components/ui/Dialog';
+import { Button } from '@/components/ui/Button';
+import { Input, Label, Select } from '@/components/ui/Input';
+import { TagInput } from '@/components/transactions/TagInput';
+import { useAccounts } from '@/hooks/useAccounts';
+import { useCategories } from '@/hooks/useCategories';
+import { useCreateTransaction, useUpdateTransaction } from '@/hooks/useTransactions';
+import { useTranslation } from '@/lib/i18n';
+import { buildHierarchicalCategories, translateCategoryName } from '@/lib/categoryLabels';
+import { formatCurrency } from '@/lib/format';
+import type { Tag, Transaction, TransactionInput, TransactionSplitInput, TransactionType } from '@/types';
 
 interface TransactionFormModalProps {
   open: boolean;
@@ -23,14 +23,14 @@ function todayIso() {
 }
 
 const EMPTY_FORM = {
-  type: "expense" as TransactionType,
-  account_id: "",
-  category_id: "",
-  transfer_account_id: "",
-  amount: "",
-  description: "",
-  merchant: "",
-  notes: "",
+  type: 'expense' as TransactionType,
+  account_id: '',
+  category_id: '',
+  transfer_account_id: '',
+  amount: '',
+  description: '',
+  merchant: '',
+  notes: '',
   date: todayIso(),
 };
 
@@ -46,14 +46,14 @@ interface SplitRowState {
 // This key is only a local React list key, never sent to the backend, so a
 // Math.random()-based fallback is fine when the Web Crypto API isn't available.
 function generateRowKey(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
   return `split-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 function emptySplitRow(): SplitRowState {
-  return { key: generateRowKey(), category_id: "", amount: "", note: "" };
+  return { key: generateRowKey(), category_id: '', amount: '', note: '' };
 }
 
 // Cents, not floats — a plain Number sum of "0.10" + "0.20" style amounts can
@@ -93,15 +93,15 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
         category_id: hasSplits
           ? baseCategory
             ? String(baseCategory.parent_id ?? baseCategory.id)
-            : ""
+            : ''
           : transaction.category_id
             ? String(transaction.category_id)
-            : "",
-        transfer_account_id: transaction.transfer_account_id ? String(transaction.transfer_account_id) : "",
+            : '',
+        transfer_account_id: transaction.transfer_account_id ? String(transaction.transfer_account_id) : '',
         amount: transaction.amount,
         description: transaction.description,
-        merchant: transaction.merchant ?? "",
-        notes: transaction.notes ?? "",
+        merchant: transaction.merchant ?? '',
+        notes: transaction.notes ?? '',
         date: transaction.date,
       });
       setTags(transaction.tags);
@@ -110,14 +110,14 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
         hasSplits
           ? transaction.splits.map((split) => ({
               key: String(split.id),
-              category_id: split.category_id ? String(split.category_id) : "",
+              category_id: split.category_id ? String(split.category_id) : '',
               amount: split.amount,
-              note: split.note ?? "",
+              note: split.note ?? '',
             }))
-          : [emptySplitRow(), emptySplitRow()]
+          : [emptySplitRow(), emptySplitRow()],
       );
     } else {
-      setForm({ ...EMPTY_FORM, account_id: accounts?.[0] ? String(accounts[0].id) : "" });
+      setForm({ ...EMPTY_FORM, account_id: accounts?.[0] ? String(accounts[0].id) : '' });
       setTags([]);
       setSplitMode(false);
       setSplitRows([emptySplitRow(), emptySplitRow()]);
@@ -126,7 +126,7 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
   }, [open, transaction, accounts]);
 
   const kindCategories = (categories ?? []).filter((category) =>
-    form.type === "income" ? category.kind === "income" : category.kind === "expense"
+    form.type === 'income' ? category.kind === 'income' : category.kind === 'expense',
   );
   // Subcategories are listed right under their parent (not scattered by
   // name) so the hierarchy set up on the Categories page reads the same way
@@ -147,7 +147,7 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
     setSplitRows((prev) => (prev.length <= 2 ? prev : prev.filter((row) => row.key !== key)));
   }
 
-  const isSplitEditingNow = form.type !== "transfer" && splitMode;
+  const isSplitEditingNow = form.type !== 'transfer' && splitMode;
   const splitAllocatedCents = splitRows.reduce((sum, row) => sum + toCents(row.amount), 0);
   const splitRemainingCents = toCents(form.amount) - splitAllocatedCents;
 
@@ -184,15 +184,15 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
     setError(null);
 
     if (!form.account_id) {
-      setError(t("transactions.form.errorSelectAccount"));
+      setError(t('transactions.form.errorSelectAccount'));
       return;
     }
-    if (form.type === "transfer" && !form.transfer_account_id) {
-      setError(t("transactions.form.errorSelectDestination"));
+    if (form.type === 'transfer' && !form.transfer_account_id) {
+      setError(t('transactions.form.errorSelectDestination'));
       return;
     }
-    if (form.type === "transfer" && form.transfer_account_id === form.account_id) {
-      setError(t("transactions.form.errorSameAccount"));
+    if (form.type === 'transfer' && form.transfer_account_id === form.account_id) {
+      setError(t('transactions.form.errorSameAccount'));
       return;
     }
 
@@ -203,21 +203,21 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
     let splits: TransactionSplitInput[] | undefined;
     if (isSplitEditingNow) {
       if (!form.category_id) {
-        setError(t("transactions.form.errorSplitNoBaseCategory"));
+        setError(t('transactions.form.errorSplitNoBaseCategory'));
         return;
       }
       const filledRows = splitRows.filter((row) => row.category_id || row.amount);
       if (filledRows.length < 2) {
-        setError(t("transactions.form.errorSplitMinRows"));
+        setError(t('transactions.form.errorSplitMinRows'));
         return;
       }
       if (filledRows.some((row) => !row.category_id || !row.amount || Number(row.amount) <= 0)) {
-        setError(t("transactions.form.errorSplitIncomplete"));
+        setError(t('transactions.form.errorSplitIncomplete'));
         return;
       }
       const allocatedCents = filledRows.reduce((sum, row) => sum + toCents(row.amount), 0);
       if (allocatedCents !== toCents(form.amount)) {
-        setError(t("transactions.form.errorSplitMismatch"));
+        setError(t('transactions.form.errorSplitMismatch'));
         return;
       }
       splits = filledRows.map((row) => ({
@@ -233,12 +233,12 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
       type: form.type,
       account_id: Number(form.account_id),
       category_id:
-        form.type === "transfer" || (splits && splits.length > 0)
+        form.type === 'transfer' || (splits && splits.length > 0)
           ? null
           : form.category_id
             ? Number(form.category_id)
             : null,
-      transfer_account_id: form.type === "transfer" ? Number(form.transfer_account_id) : null,
+      transfer_account_id: form.type === 'transfer' ? Number(form.transfer_account_id) : null,
       amount: form.amount,
       description: form.description,
       merchant: form.merchant || null,
@@ -256,7 +256,7 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
       }
       onClose();
     } catch {
-      setError(t("transactions.form.saveError"));
+      setError(t('transactions.form.saveError'));
     }
   }
 
@@ -264,44 +264,44 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
     <Dialog
       open={open}
       onClose={onClose}
-      title={transaction ? t("transactions.form.editTitle") : t("transactions.form.newTitle")}
+      title={transaction ? t('transactions.form.editTitle') : t('transactions.form.newTitle')}
     >
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className='space-y-3'>
         <div>
-          <Label htmlFor="type">{t("transactions.form.typeLabel")}</Label>
+          <Label htmlFor='type'>{t('transactions.form.typeLabel')}</Label>
           <Select
-            id="type"
+            id='type'
             value={form.type}
             onChange={(event) => {
               const nextType = event.target.value as TransactionType;
-              setForm((prev) => ({ ...prev, type: nextType, category_id: "" }));
-              if (nextType === "transfer") setSplitMode(false);
+              setForm((prev) => ({ ...prev, type: nextType, category_id: '' }));
+              if (nextType === 'transfer') setSplitMode(false);
             }}
           >
-            <option value="expense">{t("transactions.form.typeExpense")}</option>
-            <option value="income">{t("transactions.form.typeIncome")}</option>
-            <option value="transfer">{t("transactions.form.typeTransfer")}</option>
+            <option value='expense'>{t('transactions.form.typeExpense')}</option>
+            <option value='income'>{t('transactions.form.typeIncome')}</option>
+            <option value='transfer'>{t('transactions.form.typeTransfer')}</option>
           </Select>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className='grid grid-cols-2 gap-3'>
           <div>
-            <Label htmlFor="amount">{t("transactions.form.amountLabel")}</Label>
+            <Label htmlFor='amount'>{t('transactions.form.amountLabel')}</Label>
             <Input
-              id="amount"
-              type="number"
-              step="0.01"
-              min="0.01"
+              id='amount'
+              type='number'
+              step='0.01'
+              min='0.01'
               required
               value={form.amount}
               onChange={(event) => setForm((prev) => ({ ...prev, amount: event.target.value }))}
             />
           </div>
           <div>
-            <Label htmlFor="date">{t("transactions.form.dateLabel")}</Label>
+            <Label htmlFor='date'>{t('transactions.form.dateLabel')}</Label>
             <Input
-              id="date"
-              type="date"
+              id='date'
+              type='date'
               required
               value={form.date}
               onChange={(event) => setForm((prev) => ({ ...prev, date: event.target.value }))}
@@ -310,26 +310,26 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
         </div>
 
         <div>
-          <Label htmlFor="description">{t("transactions.form.descriptionLabel")}</Label>
+          <Label htmlFor='description'>{t('transactions.form.descriptionLabel')}</Label>
           <Input
-            id="description"
+            id='description'
             required
-            placeholder={t("transactions.form.descriptionPlaceholder")}
+            placeholder={t('transactions.form.descriptionPlaceholder')}
             value={form.description}
             onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
           />
         </div>
 
         <div>
-          <Label htmlFor="account">{t("transactions.form.accountLabel")}</Label>
+          <Label htmlFor='account'>{t('transactions.form.accountLabel')}</Label>
           <Select
-            id="account"
+            id='account'
             required
             value={form.account_id}
             onChange={(event) => setForm((prev) => ({ ...prev, account_id: event.target.value }))}
           >
-            <option value="" disabled>
-              {t("transactions.form.selectAccount")}
+            <option value='' disabled>
+              {t('transactions.form.selectAccount')}
             </option>
             {accounts?.map((account) => (
               <option key={account.id} value={account.id}>
@@ -339,17 +339,17 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
           </Select>
         </div>
 
-        {form.type === "transfer" ? (
+        {form.type === 'transfer' ? (
           <div>
-            <Label htmlFor="transfer_account">{t("transactions.form.transferAccountLabel")}</Label>
+            <Label htmlFor='transfer_account'>{t('transactions.form.transferAccountLabel')}</Label>
             <Select
-              id="transfer_account"
+              id='transfer_account'
               required
               value={form.transfer_account_id}
               onChange={(event) => setForm((prev) => ({ ...prev, transfer_account_id: event.target.value }))}
             >
-              <option value="" disabled>
-                {t("transactions.form.selectAccount")}
+              <option value='' disabled>
+                {t('transactions.form.selectAccount')}
               </option>
               {accounts
                 ?.filter((account) => String(account.id) !== form.account_id)
@@ -362,55 +362,51 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
           </div>
         ) : (
           <div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="category">{t("transactions.form.categoryLabel")}</Label>
-              <button
-                type="button"
-                className="mb-1 text-xs text-series-1 hover:underline"
-                onClick={toggleSplitMode}
-              >
-                {splitMode ? t("transactions.form.splitToggleOff") : t("transactions.form.splitToggle")}
+            <div className='flex items-center justify-between'>
+              <Label htmlFor='category'>{t('transactions.form.categoryLabel')}</Label>
+              <button type='button' className='mb-1 text-xs text-series-1 hover:underline' onClick={toggleSplitMode}>
+                {splitMode ? t('transactions.form.splitToggleOff') : t('transactions.form.splitToggle')}
               </button>
             </div>
 
             <Select
-              id="category"
+              id='category'
               value={form.category_id}
               onChange={(event) => handleBaseCategoryChange(event.target.value)}
             >
-              <option value="">{t("transactions.form.noCategory")}</option>
+              <option value=''>{t('transactions.form.noCategory')}</option>
               {categorySelectOptions.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.indented ? `    ↳ ` : ""}
+                  {category.indented ? `    ↳ ` : ''}
                   {translateCategoryName(category.name)}
                 </option>
               ))}
             </Select>
 
             {splitMode && (
-              <div className="mt-2 space-y-2">
+              <div className='mt-2 space-y-2'>
                 {!form.category_id ? (
-                  <p className="text-xs text-text-muted">{t("transactions.form.splitHint")}</p>
+                  <p className='text-xs text-text-muted'>{t('transactions.form.splitHint')}</p>
                 ) : baseChildCategories.length === 0 ? (
-                  <p className="text-xs text-text-muted">{t("transactions.form.splitNoChildren")}</p>
+                  <p className='text-xs text-text-muted'>{t('transactions.form.splitNoChildren')}</p>
                 ) : (
-                  <p className="text-xs text-text-muted">{t("transactions.form.splitHint")}</p>
+                  <p className='text-xs text-text-muted'>{t('transactions.form.splitHint')}</p>
                 )}
                 {splitRows.map((row) => (
-                  <div key={row.key} className="space-y-1.5 rounded-lg border border-border bg-surface-1 p-2">
-                    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2">
+                  <div key={row.key} className='space-y-1.5 rounded-lg border border-border bg-surface-1 p-2'>
+                    <div className='flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2'>
                       <Select
-                        aria-label={t("transactions.form.splitCategoryPlaceholder")}
-                        className="sm:flex-1"
+                        aria-label={t('transactions.form.splitCategoryPlaceholder')}
+                        className='sm:flex-1'
                         value={row.category_id}
                         disabled={!form.category_id}
                         onChange={(event) => updateSplitRow(row.key, { category_id: event.target.value })}
                       >
-                        <option value="" disabled>
-                          {t("transactions.form.splitCategoryPlaceholder")}
+                        <option value='' disabled>
+                          {t('transactions.form.splitCategoryPlaceholder')}
                         </option>
                         {form.category_id && (
-                          <option value={form.category_id}>{t("transactions.form.splitDirectOption")}</option>
+                          <option value={form.category_id}>{t('transactions.form.splitDirectOption')}</option>
                         )}
                         {baseChildCategories.map((category) => (
                           <option key={category.id} value={category.id}>
@@ -418,55 +414,55 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
                           </option>
                         ))}
                       </Select>
-                      <div className="flex items-center gap-1.5">
+                      <div className='flex items-center gap-1.5'>
                         <Input
-                          type="number"
-                          step="0.01"
-                          min="0.01"
-                          className="w-24"
-                          placeholder={t("transactions.form.amountLabel")}
+                          type='number'
+                          step='0.01'
+                          min='0.01'
+                          className='w-24'
+                          placeholder={t('transactions.form.amountLabel')}
                           value={row.amount}
                           onChange={(event) => updateSplitRow(row.key, { amount: event.target.value })}
                         />
                         <button
-                          type="button"
-                          aria-label={t("transactions.form.splitRemoveRow")}
+                          type='button'
+                          aria-label={t('transactions.form.splitRemoveRow')}
                           onClick={() => removeSplitRow(row.key)}
                           disabled={splitRows.length <= 2}
-                          className="shrink-0 rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger disabled:opacity-30"
+                          className='shrink-0 rounded-md p-1.5 text-text-muted hover:bg-surface-2 hover:text-danger disabled:opacity-30'
                         >
                           <X size={15} />
                         </button>
                       </div>
                     </div>
                     <Input
-                      className="text-xs"
-                      placeholder={t("transactions.form.splitNotePlaceholder")}
+                      className='text-xs'
+                      placeholder={t('transactions.form.splitNotePlaceholder')}
                       value={row.note}
                       onChange={(event) => updateSplitRow(row.key, { note: event.target.value })}
                     />
                   </div>
                 ))}
 
-                <div className="flex items-center justify-between gap-2">
+                <div className='flex items-center justify-between gap-2'>
                   <button
-                    type="button"
+                    type='button'
                     onClick={addSplitRow}
-                    className="flex items-center gap-1 rounded-md py-1 text-xs text-series-1 hover:underline"
+                    className='flex items-center gap-1 rounded-md py-1 text-xs text-series-1 hover:underline'
                   >
                     <Plus size={14} />
-                    {t("transactions.form.splitAddRow")}
+                    {t('transactions.form.splitAddRow')}
                   </button>
-                  <p className={`text-xs ${splitRemainingCents === 0 ? "text-success" : "text-text-muted"}`}>
+                  <p className={`text-xs ${splitRemainingCents === 0 ? 'text-success' : 'text-text-muted'}`}>
                     {splitRemainingCents > 0
-                      ? t("transactions.form.splitRemainingLabel", {
+                      ? t('transactions.form.splitRemainingLabel', {
                           amount: formatCurrency(splitRemainingCents / 100),
                         })
                       : splitRemainingCents < 0
-                        ? t("transactions.form.splitOverAllocatedLabel", {
+                        ? t('transactions.form.splitOverAllocatedLabel', {
                             amount: formatCurrency(Math.abs(splitRemainingCents) / 100),
                           })
-                        : t("transactions.form.splitFullyAllocatedLabel")}
+                        : t('transactions.form.splitFullyAllocatedLabel')}
                   </p>
                 </div>
               </div>
@@ -475,20 +471,20 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
         )}
 
         <div>
-          <Label htmlFor="merchant">{t("transactions.form.merchantLabel")}</Label>
+          <Label htmlFor='merchant'>{t('transactions.form.merchantLabel')}</Label>
           <Input
-            id="merchant"
+            id='merchant'
             value={form.merchant}
             onChange={(event) => setForm((prev) => ({ ...prev, merchant: event.target.value }))}
           />
         </div>
 
         <div>
-          <Label htmlFor="notes">{t("transactions.form.notesLabel")}</Label>
+          <Label htmlFor='notes'>{t('transactions.form.notesLabel')}</Label>
           {/* Matches the server's max_length on notes — without it an overlong
               note only fails on save, as an untranslated 422. */}
           <Input
-            id="notes"
+            id='notes'
             maxLength={2000}
             value={form.notes}
             onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))}
@@ -496,18 +492,18 @@ export function TransactionFormModal({ open, onClose, transaction }: Transaction
         </div>
 
         <div>
-          <Label htmlFor="transaction-tags">{t("transactions.form.tagsLabel")}</Label>
+          <Label htmlFor='transaction-tags'>{t('transactions.form.tagsLabel')}</Label>
           <TagInput value={tags} onChange={setTags} />
         </div>
 
-        {error && <p className="text-sm text-danger">{error}</p>}
+        {error && <p className='text-sm text-danger'>{error}</p>}
 
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose}>
-            {t("common.cancel")}
+        <div className='flex justify-end gap-2 pt-2'>
+          <Button type='button' variant='ghost' onClick={onClose}>
+            {t('common.cancel')}
           </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("common.saving") : t("common.save")}
+          <Button type='submit' disabled={isSaving}>
+            {isSaving ? t('common.saving') : t('common.save')}
           </Button>
         </div>
       </form>
