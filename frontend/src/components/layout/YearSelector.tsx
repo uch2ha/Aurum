@@ -47,33 +47,32 @@ function YearDropdown({ years, year, onChange }: YearDropdownProps) {
       </button>
 
       {open && (
-        <ul
+        <div
           role='listbox'
           className='absolute right-0 top-full z-20 mt-1.5 max-h-64 w-24 overflow-y-auto rounded-lg border border-border bg-surface-1 py-1 shadow-lg'
         >
           {sortedYears.map((value) => {
             const active = value === year;
             return (
-              <li key={value}>
-                <button
-                  type='button'
-                  role='option'
-                  aria-selected={active}
-                  onClick={() => {
-                    onChange(value);
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    'block w-full px-3 py-1.5 text-left text-sm transition-colors',
-                    active ? 'bg-surface-2 font-semibold text-text-primary' : 'text-text-secondary hover:bg-surface-2',
-                  )}
-                >
-                  {value}
-                </button>
-              </li>
+              <button
+                key={value}
+                type='button'
+                role='option'
+                aria-selected={active}
+                onClick={() => {
+                  onChange(value);
+                  setOpen(false);
+                }}
+                className={cn(
+                  'block w-full px-3 py-1.5 text-left text-sm transition-colors',
+                  active ? 'bg-surface-2 font-semibold text-text-primary' : 'text-text-secondary hover:bg-surface-2',
+                )}
+              >
+                {value}
+              </button>
             );
           })}
-        </ul>
+        </div>
       )}
     </div>
   );

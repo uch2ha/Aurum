@@ -67,7 +67,10 @@ export function RiskLevelPicker({ value, onChange }: RiskLevelPickerProps) {
         type='button'
         aria-label={t(`netWorth.riskLevel.${value}` as TranslationKey)}
         title={t(`netWorth.riskLevel.${value}` as TranslationKey)}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={(event) => {
+          event.stopPropagation();
+          setOpen((prev) => !prev);
+        }}
         className='flex items-center rounded p-1 hover:bg-surface-2'
       >
         <RiskBars level={value} />
@@ -78,7 +81,8 @@ export function RiskLevelPicker({ value, onChange }: RiskLevelPickerProps) {
             <button
               key={level}
               type='button'
-              onClick={() => {
+              onClick={(event) => {
+                event.stopPropagation();
                 onChange(level);
                 setOpen(false);
               }}

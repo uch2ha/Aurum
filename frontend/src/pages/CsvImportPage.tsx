@@ -51,6 +51,10 @@ type Mapping = ImportMapping;
 // preset id pins one regardless of what the headers look like.
 const PRESET_AUTO = 'auto';
 
+function resolveType(amount: number): 'income' | 'expense' {
+  return amount < 0 ? 'expense' : 'income';
+}
+
 interface SkippedRow {
   row: number;
   reason: string;
@@ -160,6 +164,7 @@ export function CsvImportPage() {
   // JSON.stringify, not join(): joining on a separator would read
   // ["ab","c"] and ["a","bc"] as one and the same header row.
   const headersKey = JSON.stringify(headers);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: keyed on headersKey (the header row's contents), not the headers array identity.
   useEffect(() => {
     if (headers.length === 0) return;
     const preset = resolvePreset(headers, presetChoice);
@@ -172,7 +177,6 @@ export function CsvImportPage() {
       setDateFormat(defaults.dateFormat);
       setAmountFormat(defaults.amountFormat);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headersKey, presetChoice]);
 
   const categoryLookup = useMemo(() => {
@@ -183,10 +187,6 @@ export function CsvImportPage() {
     }
     return map;
   }, [categories]);
-
-  function resolveType(amount: number): 'income' | 'expense' {
-    return amount < 0 ? 'expense' : 'income';
-  }
 
   const categoryNameById = (categoryId: number | null): string => {
     const category = categories?.find((c) => c.id === categoryId);
@@ -321,7 +321,6 @@ export function CsvImportPage() {
       skipped: skippedRows,
       duplicateCount: duplicateRows.length,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     step,
     headers,
@@ -336,6 +335,19 @@ export function CsvImportPage() {
     activePreset,
     t,
   ]);
+
+  // Preview rows carry a stable id derived from their dedupe key plus an
+  // occurrence counter, so two identical transactions still get distinct
+  // React keys without falling back to the array index.
+  const previewRows = useMemo(() => {
+    const seen = new Map<string, number>();
+    return valid.slice(0, 20).map((item) => {
+      const base = transactionDedupeKey(item.date, item.type, item.amount, item.description);
+      const occurrence = seen.get(base) ?? 0;
+      seen.set(base, occurrence + 1);
+      return { id: `${base}#${occurrence}`, item };
+    });
+  }, [valid]);
 
   async function handleFileSelected(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -734,8 +746,8 @@ export function CsvImportPage() {
                         </tr>
                       </thead>
                       <tbody className='divide-y divide-gridline'>
-                        {valid.slice(0, 20).map((item, index) => (
-                          <tr key={index}>
+                        {previewRows.map(({ id, item }) => (
+                          <tr key={id}>
                             <td className='whitespace-nowrap px-3 py-1.5 text-text-secondary'>{item.date}</td>
                             <td className='px-3 py-1.5 text-text-primary'>{item.description}</td>
                             <td className='whitespace-nowrap px-3 py-1.5 text-text-secondary'>

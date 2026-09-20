@@ -28,5 +28,6 @@ export function Select({ className, children, ...props }: SelectHTMLAttributes<H
 }
 
 export function Label({ className, ...props }: LabelHTMLAttributes<HTMLLabelElement>) {
+  // biome-ignore lint/a11y/noLabelWithoutControl: shared label primitive — callers pass htmlFor (or a control child); the association isn't visible at the component definition.
   return <label className={cn('mb-1 block text-xs font-medium text-text-secondary', className)} {...props} />;
 }

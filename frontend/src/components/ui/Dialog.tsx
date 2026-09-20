@@ -25,13 +25,12 @@ export function Dialog({ open, onClose, title, children }: DialogProps) {
   if (!open) return null;
 
   return (
-    <div
-      className={cn('fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4')}
-      onClick={onClose}
-    >
+    <div className={cn('fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4')}>
+      <button type='button' aria-label={t('common.close')} onClick={onClose} className='absolute inset-0 bg-black/40' />
       <div
-        className='max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-border bg-surface-1 p-5 shadow-xl sm:max-w-md sm:rounded-2xl'
-        onClick={(event) => event.stopPropagation()}
+        role='dialog'
+        aria-modal='true'
+        className='relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-border bg-surface-1 p-5 shadow-xl sm:max-w-md sm:rounded-2xl'
       >
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-base font-semibold text-text-primary'>{title}</h2>

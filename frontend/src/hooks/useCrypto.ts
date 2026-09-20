@@ -98,7 +98,10 @@ export function useCrypto90dPerformance(range: CryptoRange, portfolioId?: number
 export function useCryptoTransactions(assetId: number | null) {
   return useQuery({
     queryKey: ['crypto-transactions', assetId],
-    queryFn: () => fetchCryptoTransactions(assetId!),
+    queryFn: () => {
+      if (assetId === null) throw new Error('assetId is required');
+      return fetchCryptoTransactions(assetId);
+    },
     enabled: assetId !== null,
   });
 }

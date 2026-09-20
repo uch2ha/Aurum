@@ -136,12 +136,12 @@ export function CategoryFormModal({ open, onClose, category, defaultKind }: Cate
         </div>
 
         <div>
-          <Label>{t('category.form.iconLabel')}</Label>
+          <span className='mb-1 block text-xs font-medium text-text-secondary'>{t('category.form.iconLabel')}</span>
           <CategoryIconPicker value={form.icon} onChange={(icon) => setForm((prev) => ({ ...prev, icon }))} />
         </div>
 
         <div>
-          <Label>{t('category.form.colorLabel')}</Label>
+          <span className='mb-1 block text-xs font-medium text-text-secondary'>{t('category.form.colorLabel')}</span>
           <CategoryColorPicker value={form.color} onChange={(color) => setForm((prev) => ({ ...prev, color }))} />
         </div>
 

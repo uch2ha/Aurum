@@ -55,7 +55,7 @@ export function CryptoTransactionModal({ open, onClose, holding, transaction = n
       setNote('');
     }
     setError(null);
-  }, [open, holding, transaction]);
+  }, [open, transaction]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();

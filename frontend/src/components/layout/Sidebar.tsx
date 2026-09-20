@@ -132,7 +132,12 @@ export function Sidebar({ collapsed, onToggleCollapsed, mobileOpen, onCloseMobil
       {/* Mobile: off-canvas drawer over a backdrop. */}
       {mobileOpen && (
         <div className='fixed inset-0 z-50 lg:hidden'>
-          <div className='absolute inset-0 bg-black/40' onClick={onCloseMobile} />
+          <button
+            type='button'
+            aria-label={t('sidebar.closeMenu')}
+            onClick={onCloseMobile}
+            className='absolute inset-0 bg-black/40'
+          />
           <aside className='absolute inset-y-0 left-0 flex w-64 flex-col bg-surface-1 shadow-xl'>
             <div className='flex items-center justify-between gap-2 px-4 py-4'>
               <span className='flex items-center gap-2 text-lg font-semibold tracking-tight text-text-primary'>

@@ -29,7 +29,7 @@ export function GoalContributionModal({ open, onClose, goal }: GoalContributionM
     setAmount('');
     setDate(todayIso());
     setError(null);
-  }, [open, goal]);
+  }, [open]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();

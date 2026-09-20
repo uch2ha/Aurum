@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from '@/lib/i18n';
 
 interface NetworkPickerProps {
@@ -17,6 +17,11 @@ export function NetworkPicker({ value, knownNetworks, onChange }: NetworkPickerP
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(value ?? '');
   const listId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
 
   function commit() {
     setOpen(false);
@@ -28,10 +33,11 @@ export function NetworkPicker({ value, knownNetworks, onChange }: NetworkPickerP
     return (
       <>
         <input
-          autoFocus
+          ref={inputRef}
           list={listId}
           value={draft}
           onChange={(event) => setDraft(event.target.value.toUpperCase())}
+          onClick={(event) => event.stopPropagation()}
           onBlur={commit}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
@@ -54,7 +60,8 @@ export function NetworkPicker({ value, knownNetworks, onChange }: NetworkPickerP
   return (
     <button
       type='button'
-      onClick={() => {
+      onClick={(event) => {
+        event.stopPropagation();
         setDraft(value ?? '');
         setOpen(true);
       }}

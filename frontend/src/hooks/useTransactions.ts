@@ -49,7 +49,12 @@ export function useTransactionsForDuplicateCheck(
 ) {
   return useQuery({
     queryKey: ['transactions-duplicate-check', accountId, startDate, endDate],
-    queryFn: () => fetchAllTransactionsInRange({ account_id: accountId!, start_date: startDate!, end_date: endDate! }),
+    queryFn: () => {
+      if (accountId === null || startDate === null || endDate === null) {
+        throw new Error('accountId, startDate and endDate are required');
+      }
+      return fetchAllTransactionsInRange({ account_id: accountId, start_date: startDate, end_date: endDate });
+    },
     enabled: accountId !== null && startDate !== null && endDate !== null,
   });
 }

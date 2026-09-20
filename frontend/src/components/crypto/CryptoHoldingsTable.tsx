@@ -163,12 +163,12 @@ export function CryptoHoldingsTable({
                     <span className='text-text-muted'>—</span>
                   )}
                 </td>
-                <td className='py-3.5 pr-4 align-middle' onClick={(event) => event.stopPropagation()}>
+                <td className='py-3.5 pr-4 align-middle'>
                   <span className='flex w-full justify-end'>
                     <RiskLevelPicker value={holding.risk_level} onChange={(level) => onRiskChange(holding, level)} />
                   </span>
                 </td>
-                <td className='py-3.5 pr-4 align-middle' onClick={(event) => event.stopPropagation()}>
+                <td className='py-3.5 pr-4 align-middle'>
                   <span className='flex w-full justify-end'>
                     <NetworkPicker
                       value={holding.network}

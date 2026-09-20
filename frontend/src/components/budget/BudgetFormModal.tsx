@@ -30,6 +30,7 @@ export function BudgetFormModal({ open, onClose, budget, excludeCategoryIds }: B
   const availableCategories = (categories ?? [])
     .filter((category) => category.kind === 'expense' && !excludeCategoryIds.includes(category.id))
     .sort((a, b) => translateCategoryName(a.name).localeCompare(translateCategoryName(b.name), language));
+  const firstAvailableCategoryId = availableCategories[0]?.id ?? null;
 
   useEffect(() => {
     if (!open) return;
@@ -37,13 +38,11 @@ export function BudgetFormModal({ open, onClose, budget, excludeCategoryIds }: B
       setCategoryId(String(budget.category_id));
       setMonthlyLimit(budget.monthly_limit);
     } else {
-      setCategoryId(availableCategories[0] ? String(availableCategories[0].id) : '');
+      setCategoryId(firstAvailableCategoryId === null ? '' : String(firstAvailableCategoryId));
       setMonthlyLimit('');
     }
     setError(null);
-    // availableCategories is derived from `categories`, not a stable dep — only re-run on open/budget change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, budget]);
+  }, [open, budget, firstAvailableCategoryId]);
 
   const isSaving = createBudget.isPending || updateBudget.isPending;
 
@@ -55,7 +54,10 @@ export function BudgetFormModal({ open, onClose, budget, excludeCategoryIds }: B
       if (budget) {
         await updateBudget.mutateAsync({ id: budget.id, monthlyLimit });
       } else {
-        await createBudget.mutateAsync({ category_id: Number(categoryId), monthly_limit: monthlyLimit });
+        await createBudget.mutateAsync({
+          category_id: Number(categoryId),
+          monthly_limit: monthlyLimit,
+        });
       }
       onClose();
     } catch {
